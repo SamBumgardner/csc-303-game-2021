@@ -14,6 +14,8 @@ class Hero extends FlxSprite {
 
     public static var BASE_MOVE_SPEED:Float = 200;
 
+    public var playerHealth(default, null):PlayerHealth;
+
     // Controls
     private static var INPUT_LEFT:FlxKey = FlxKey.LEFT;
     private static var INPUT_RIGHT:FlxKey = FlxKey.RIGHT;
@@ -25,6 +27,7 @@ class Hero extends FlxSprite {
 
     public function new(X:Float = 0, Y:Float = 0) {
         super(X, Y);
+        playerHealth = new PlayerHealth();
         initializeGraphics();
     }
 
