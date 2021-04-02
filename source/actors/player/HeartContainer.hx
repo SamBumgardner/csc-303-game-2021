@@ -79,4 +79,19 @@ class HeartContainer extends FlxSprite {
             fragments += amount;
         }
     }
+
+    /**
+	 * Function to set the fragment amount for this heart container.
+     * @author Matt Lippelman
+     * @param amount an integer value in fragments (4 per heart) to set this heart to
+     * @return void
+	 */
+    public function setFragments(amount:Int):Void {
+        if (amount > MAXFRAGAMOUNT) {
+            fragments = MAXFRAGAMOUNT;
+        } else {
+            fragments = amount;
+        }
+        updateGraphics();
+    }
 }

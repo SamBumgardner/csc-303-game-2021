@@ -94,8 +94,8 @@ class PlayerHealth {
 	 */
     public function increaseMaxHealth(fragments:Int):Void {
         maxHealth += fragments;
-        healthGraphicGroup.add(new HeartContainer((healthGraphicGroup.countLiving()-1)*32, 0, fragments));
-        fixGraphics();
+        healthGraphicGroup.add(new HeartContainer((healthGraphicGroup.countLiving()-1)*32, 0, 0));
+        fixGraphics(fragments);
     }
 
     /**
@@ -103,8 +103,17 @@ class PlayerHealth {
      * @author Matt Lippelman
      * @return void
 	 */
-    private function fixGraphics():Void {
-
+    private function fixGraphics(fragments:Int):Void {
+        var health:Int = currentHealth() + fragments;
+        for (val in 0...healthGraphicGroup.countLiving()) {
+            var heart:HeartContainer = healthGraphicGroup.members[val];
+            if (health >= HeartContainer.MAXFRAGAMOUNT) {
+                health -= HeartContainer.MAXFRAGAMOUNT;
+                heart.setFragments(HeartContainer.MAXFRAGAMOUNT);
+            } else {
+                heart.setFragments(health);
+            }
+        }
     }
 
     /**
@@ -117,7 +126,6 @@ class PlayerHealth {
         var value:Int = 0;
         for (val in 0...healthGraphicGroup.countLiving()) {
             value += healthGraphicGroup.members[val].fragments;
-            trace("Heart " + val + " has " + healthGraphicGroup.members[val].fragments + " fragments");
         }
         return value;
     }
