@@ -24,6 +24,6 @@ class PlayState extends FlxState
 	 */
 	private function addEntities():Void {
 		add(hero);
-		add(hero.playerHealth.healthGraphicGroup);
+		add(hero.playerHealth);
 	}
 }
