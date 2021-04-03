@@ -12,6 +12,9 @@ class Hero extends FlxSprite {
     public static var WIDTH(default, never):Int = 32;
     public static var HEIGHT(default, never):Int = 32;
 
+    public static var SWORDW(default, never):Int = 5;
+    public static var SWORDH(default, never):Int = 32;
+
     public static var BASE_MOVE_SPEED:Float = 200;
 
     // Controls
@@ -37,6 +40,10 @@ class Hero extends FlxSprite {
 
         var moveDirection:FlxVector = selectMoveDirection();
         standardMovement(moveDirection);
+        if(ACTION_1 == true)
+            {
+                useItem();
+            }
     }
 
     private function selectMoveDirection():FlxVector {
