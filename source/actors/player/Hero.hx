@@ -40,10 +40,6 @@ class Hero extends FlxSprite {
 
         var moveDirection:FlxVector = selectMoveDirection();
         standardMovement(moveDirection);
-        if(ACTION_1 == true)
-            {
-                useItem();
-            }
     }
 
     private function selectMoveDirection():FlxVector {
