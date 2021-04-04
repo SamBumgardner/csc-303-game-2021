@@ -24,6 +24,7 @@ class PlayState extends FlxState
 		hero = new Hero();
 		add(hero);
 
+		// Add door objects
 		doors = new FlxTypedGroup<Door>();
 		door = new Door(50, 50);
 		doors.add(door);
@@ -31,6 +32,7 @@ class PlayState extends FlxState
 		doors.add(door);
 		add(doors);
 
+		// Add key objects
 		keys = new FlxTypedGroup<Key>();
 		key = new Key(100, 100);
 		keys.add(key);
@@ -43,21 +45,28 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		if(FlxObject.updateTouchingFlags(hero, doors))
-			{
-				if(totalKeys.getKey() > 1)
-					{
-						totalKeys.useKeys();
-						doors.open();
-					}
-			}
-		if(FlxObject.updateTouchingFlags(hero, keys))
-			{
-				totalKeys.pickup();
-				keys.pickup();
-			}
+		// Checks if hero is collideing with doors or keys
+		FlxG.overlap(hero, doors, openDoor);
+		FlxG.overlap(hero, keys, pickupKey);
 		FlxG.collide(hero, doors);
 		
 		super.update(elapsed);
 	}
+
+	// Opens locked doors if you have a key
+	private function openDoor(hero:Hero, door:Door)
+		{
+			if(totalKeys.getKey() > 0)
+				{
+					totalKeys.useKeys();
+					door.openDoor();
+				}
+		}
+
+	// Picks up the Key
+	private function pickupKey(hero:Hero, key:Key)
+		{
+			totalKeys.pickup();
+			key.pickup();
+		}
 }

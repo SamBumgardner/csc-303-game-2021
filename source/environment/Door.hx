@@ -30,6 +30,7 @@ class Door extends FlxSprite
         super.update(elapsed);
     }
 
+    // kills object when player comes with a key
     public function openDoor():Void
     {
         kill();    

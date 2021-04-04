@@ -28,6 +28,7 @@ class Key extends FlxSprite
         super.update(elapsed);
     }
 
+    // kills object when hero picks up key
     public function pickup()
     {
         kill();
