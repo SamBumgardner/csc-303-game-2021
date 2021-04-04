@@ -1,8 +1,6 @@
 package actors.player;
 
-
-import flixel.input.FlxInput.FlxInputState;
-import flixel.input.keyboard.FlxKey;
+import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
@@ -13,6 +11,9 @@ class Item extends FlxSprite
 
     // 0 = right, 1 = down, 2 = left, 3 = up
     private var lastUsed:Int = 0;
+
+    private var time:FlxTimer;
+    private var delay:Float = 0.2;
 
     public function new() {
         super();
@@ -35,6 +36,11 @@ class Item extends FlxSprite
                 {
                     lastUsed = 3;
                 }
+            if(time.finished)
+            {
+                time.cancel();
+                //kill();
+            }
         }
 
     public function useItem(heroX, heroY)
@@ -63,9 +69,12 @@ class Item extends FlxSprite
                 angle = 180;
                 makeGraphic(10, 50);
             }
+        time = new FlxTimer().start(delay, stopSwing, 1);
         
-        //kill();
-
     }
 
+    private function stopSwing(timer:FlxTimer)
+        {
+            //kill();
+        }
 }
