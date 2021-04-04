@@ -39,6 +39,15 @@ class Hero extends FlxSprite {
         standardMovement(moveDirection);
     }
 
+    public function getX()
+        {
+            return x;
+        }
+    public function getY()
+        {
+            return y;
+        }
+
     private function selectMoveDirection():FlxVector {
         var horizontalDirection:Int = 0;
         var verticalDirection:Int = 0;
