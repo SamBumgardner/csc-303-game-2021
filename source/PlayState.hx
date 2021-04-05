@@ -1,5 +1,9 @@
 package;
 
+import actors.enemies.KnightEnemy;
+import actors.enemies.SlimeEnemy;
+import flixel.util.FlxColor;
+import actors.enemies.BatEnemy;
 import flixel.FlxG;
 import actors.enemies.Enemy;
 import flixel.group.FlxGroup;
@@ -14,6 +18,7 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		bgColor =  FlxColor.fromString("0xababab");
 		hero = new Hero();
 		add(hero);
 		enemies = new FlxTypedGroup<Enemy>();
@@ -29,7 +34,13 @@ class PlayState extends FlxState
 
 	private function addEnemies() {
 		for (val in 0...5) {
-			enemies.add(new Enemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500), REGULAR, 32, 32, 16, 16, 8, 8));
+			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
+		}
+		for (val in 0...3) {
+			enemies.add(new SlimeEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
+		}
+		for (val in 0...3) {
+			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package actors.enemies;
 
+
+import flixel.system.FlxAssets.FlxGraphicAsset;
 import actors.enemies.fsm.states.Combat.CombatState;
 import actors.enemies.fsm.states.Idle.IdleState;
 import actors.enemies.fsm.EnemyStates;
@@ -23,9 +25,10 @@ class Enemy extends FlxSprite {
     private static var DRAG:Float = 8;
 
     // Animation strings
-    private static var LEFT_RIGHT:String = "lr";
-    private static var UP:String = "u";
-    private static var DOWN:String = "d";
+    public static var LEFT_RIGHT:String = "lr";
+    public static var UP:String = "u";
+    public static var DOWN:String = "d";
+    public static var ATTACK:String = "attack";
 
     private var type:EnemyType;
     private var spriteWidth:Int;
@@ -46,6 +49,8 @@ class Enemy extends FlxSprite {
         this.offset.y = offsetY;
         this.health = health;
         drag.x = drag.y = DRAG;
+        setFacingFlip(FlxObject.LEFT, false, false);
+        setFacingFlip(FlxObject.RIGHT, true, false);
         initializeGraphics();
         setupFSM();
     }
@@ -76,6 +81,17 @@ class Enemy extends FlxSprite {
                     facing = FlxObject.DOWN;
                 }
             }
+        }
+
+        switch (facing) {
+            case FlxObject.LEFT, FlxObject.RIGHT:
+                    animation.play(LEFT_RIGHT);
+
+                case FlxObject.UP:
+                    animation.play(UP);
+
+                case FlxObject.DOWN:
+                    animation.play(DOWN);
         }
         state.update(elapsed);
         super.update(elapsed);
