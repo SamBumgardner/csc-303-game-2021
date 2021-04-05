@@ -2,11 +2,17 @@ package actors.player;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxObject;
 
 class Item extends FlxSprite 
 {
-    // 0 = right, 1 = down, 2 = left, 3 = up
-    private var lastUsed:Int = 0;    
+    private var up:Bool = false;
+    private var down:Bool = false;
+    private var left:Bool = false;
+    private var right:Bool = false;
+    var newAngle:Float = 0;
+    var xMod:Float = 0;
+    var yMod:Float = 0;
 
     public function new() {
         super();
@@ -14,52 +20,94 @@ class Item extends FlxSprite
     }
     override public function update(elapsed:Float):Void
         {
-            if(FlxG.keys.pressed.RIGHT)
+            up = FlxG.keys.pressed.UP;
+            down = FlxG.keys.pressed.DOWN;
+            left = FlxG.keys.pressed.LEFT;
+            right = FlxG.keys.pressed.RIGHT;
+
+            if (up)
                 {
-                    lastUsed = 0;
+                    newAngle = -90;
+                    if (left)
+                        newAngle -= 45;
+                    else if (right)
+                        newAngle += 45;
+                    facing = FlxObject.UP;
                 }
-            else if(FlxG.keys.pressed.DOWN)
+                else if (down)
                 {
-                    lastUsed = 1;
+                    newAngle = 90;
+                    if (left)
+                        newAngle += 45;
+                    else if (right)
+                        newAngle -= 45;
+                    facing = FlxObject.DOWN;
                 }
-            else if(FlxG.keys.pressed.LEFT)
+                else if (left)
                 {
-                    lastUsed = 2;
+                    newAngle = 180;
+                    facing = FlxObject.LEFT;
                 }
-            else if(FlxG.keys.pressed.UP)
+                else if (right)
                 {
-                    lastUsed = 3;
+                    newAngle = 0;
+                    facing = FlxObject.RIGHT;
                 }
         }
 
     public function useItem()
     {
-        if(lastUsed == 0)
+        if(newAngle == -90)
             {
-                angle = 0;
-                makeGraphic(50, 10);
+                xMod = -21;
+                yMod = -20;
             }
-        else if(lastUsed == 1)
+        else if(newAngle == -135)
             {
-                angle = 0;
-                makeGraphic(10, 50);
+                xMod = -35;
+                yMod = -15;
             }
-        else if(lastUsed == 2)
+        else if(newAngle == -45)
             {
-                x -= 50;
-                angle = 180;
-                makeGraphic(50, 10);
+                xMod = -5;
+                yMod = -15;
             }
-        else if(lastUsed == 3)
+        else if(newAngle == 90)
             {
-                y -= 50;
-                angle = 180;
-                makeGraphic(10, 50);
+                xMod = -21;
+                yMod = 15;
             }
+        else if(newAngle == 45)
+            {
+                xMod = -5;
+                yMod = 15;
+            }
+        else if(newAngle == 135)
+            {
+                xMod = -35;
+                yMod = 15;
+            }
+        else if(newAngle == 180)
+            {
+                xMod = -40;
+                yMod = 0;
+            }
+
+        angle = newAngle;
+        makeGraphic(50,10);
+        
     }
 
     public function swing()
         {
             makeGraphic(1,1);
+            xMod = 0;
+            yMod = 0;
+        }
+
+    public function pos(hX, hY)
+        {
+            x = hX + xMod;
+            y = hY + yMod;
         }
 }

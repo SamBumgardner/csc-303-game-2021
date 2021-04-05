@@ -26,8 +26,7 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
-		sword.x = hero.x + 12;
-		sword.y = hero.y + 12;
+		sword.pos(hero.x + 12, hero.y + 12);
 
 		if (FlxG.keys.justPressed.A)
 			{
