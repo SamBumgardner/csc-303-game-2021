@@ -30,8 +30,17 @@ class PlayState extends FlxState
 		super.update(elapsed);
 	}
 
+	/**
+	 * Helper function that adds all starting objects to the Scene.
+	 */
+	private function addEntities():Void {
+		add(hero);
+		add(hero.playerHealth);
+    add(enemies);
+    addEnemies();
+	}
 
-	private function addEnemies() {
+  private function addEnemies() {
 		for (val in 0...5) {
 			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
@@ -41,14 +50,5 @@ class PlayState extends FlxState
 		for (val in 0...3) {
 			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
-	}
-	/**
-	 * Helper function that adds all starting objects to the Scene.
-	 */
-	private function addEntities():Void {
-		add(hero);
-		add(hero.playerHealth);
-		add(enemies);
-		addEnemies();
 	}
 }
