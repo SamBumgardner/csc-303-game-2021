@@ -19,11 +19,9 @@ class PlayState extends FlxState
 	{
 		super.create();
 		bgColor =  FlxColor.fromString("0xababab");
-		hero = new Hero();
-		add(hero);
+		hero = new Hero(0,32);
 		enemies = new FlxTypedGroup<Enemy>();
-		add(enemies);
-		addEnemies();
+		addEntities();
 	}
 
 	override public function update(elapsed:Float):Void
@@ -31,6 +29,7 @@ class PlayState extends FlxState
 		FlxG.overlap(hero, enemies, Enemy.playerTouchEnemy);
 		super.update(elapsed);
 	}
+
 
 	private function addEnemies() {
 		for (val in 0...5) {
@@ -42,5 +41,14 @@ class PlayState extends FlxState
 		for (val in 0...3) {
 			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
+	}
+	/**
+	 * Helper function that adds all starting objects to the Scene.
+	 */
+	private function addEntities():Void {
+		add(hero);
+		add(hero.playerHealth);
+		add(enemies);
+		addEnemies();
 	}
 }
