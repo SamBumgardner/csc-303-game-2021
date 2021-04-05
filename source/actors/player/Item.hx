@@ -5,14 +5,12 @@ import flixel.FlxSprite;
 
 class Item extends FlxSprite 
 {
-    public var sWidth(default, never):Int = 50;
-    public var sHeight(default, never):Int = 10;
-
     // 0 = right, 1 = down, 2 = left, 3 = up
     private var lastUsed:Int = 0;    
 
     public function new() {
         super();
+        makeGraphic(1,1);
     }
     override public function update(elapsed:Float):Void
         {

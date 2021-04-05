@@ -18,6 +18,7 @@ class PlayState extends FlxState
 		hero = new Hero();
 		add(hero);
 		sword = new Item();
+		add(sword);
 		time = new FlxTimer();
 	}
 
@@ -30,7 +31,6 @@ class PlayState extends FlxState
 
 		if (FlxG.keys.justPressed.A)
 			{
-				add(sword);
 				sword.useItem();
 				time.start(0.2, onSwing, 1);
 			}
