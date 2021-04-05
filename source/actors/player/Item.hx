@@ -1,6 +1,5 @@
 package actors.player;
 
-import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
@@ -10,10 +9,7 @@ class Item extends FlxSprite
     public var sHeight(default, never):Int = 10;
 
     // 0 = right, 1 = down, 2 = left, 3 = up
-    private var lastUsed:Int = 0;
-
-    private var time:FlxTimer;
-    private var delay:Float = 0.2;
+    private var lastUsed:Int = 0;    
 
     public function new() {
         super();
@@ -36,17 +32,10 @@ class Item extends FlxSprite
                 {
                     lastUsed = 3;
                 }
-            if(time.finished)
-            {
-                time.cancel();
-                //kill();
-            }
         }
 
-    public function useItem(heroX, heroY)
+    public function useItem()
     {
-        x = heroX + 12.0;
-        y = heroY + 12.0;
         if(lastUsed == 0)
             {
                 angle = 0;
@@ -69,12 +58,10 @@ class Item extends FlxSprite
                 angle = 180;
                 makeGraphic(10, 50);
             }
-        time = new FlxTimer().start(delay, stopSwing, 1);
-        
     }
 
-    private function stopSwing(timer:FlxTimer)
+    public function swing()
         {
-            //kill();
+            makeGraphic(1,1);
         }
 }
