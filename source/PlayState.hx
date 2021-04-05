@@ -40,7 +40,10 @@ class PlayState extends FlxState
     addEnemies();
 	}
 
-  private function addEnemies() {
+	/*
+	 * Added to test movement and loading of enemies
+	 */
+  	private function addEnemies() {
 		for (val in 0...5) {
 			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}

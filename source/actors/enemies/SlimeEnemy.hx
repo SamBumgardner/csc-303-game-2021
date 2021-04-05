@@ -15,12 +15,20 @@ class SlimeEnemy extends Enemy {
         addAnimations();
     }
 
+    /**
+	 * Helper function that initializes the graphics and scale the sprite.
+     * @author Matt Lippelman
+	 */
     private override function initializeGraphics():Void {
         loadGraphic(AssetPaths.Slime__png, true, WIDTH, HEIGHT);
         offset.set(OFFSET_X, OFFSET_Y);
         setGraphicSize(WIDTH * 2, HEIGHT * 2);
     }
 
+    /**
+	 * Helper function to add animations
+     * @author Matt Lippelman
+	 */
     private function addAnimations() {
         animation.add(Enemy.DOWN, [0, 1], 6, false);
         animation.add(Enemy.LEFT_RIGHT, [0, 1], 6, false);

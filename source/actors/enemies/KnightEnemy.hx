@@ -15,13 +15,21 @@ class KnightEnemy extends Enemy {
         addAnimations();
     }
 
+    /**
+	 * Helper function that initializes the graphics and scale the sprite.
+     * @author Matt Lippelman
+	 */
     private override function initializeGraphics():Void {
         loadGraphic(AssetPaths.Knight__png, true, WIDTH, HEIGHT);
         offset.set(OFFSET_X, OFFSET_Y);
         setGraphicSize(WIDTH * 2, HEIGHT * 2);
     }
 
-    private function addAnimations() {
+    /**
+	 * Helper function to add animations
+     * @author Matt Lippelman
+	 */
+    private function addAnimations():Void {
         animation.add(Enemy.DOWN, [0, 1, 0, 3], 6, true);
         animation.add(Enemy.LEFT_RIGHT, [0, 1, 0, 3], 6, true);
         animation.add(Enemy.UP, [0, 1, 0, 3], 6, true);
