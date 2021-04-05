@@ -45,12 +45,11 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		// Checks if hero is collideing with doors or keys
+		// Checks if hero is collideing with doors or keys		
+		super.update(elapsed);
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
 		FlxG.collide(hero, doors);
-		
-		super.update(elapsed);
 	}
 
 	// Opens locked doors if you have a key
