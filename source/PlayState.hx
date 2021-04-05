@@ -10,12 +10,20 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
-		hero = new Hero();
-		add(hero);
+		hero = new Hero(0,32);
+		addEntities();
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+	}
+
+	/**
+	 * Helper function that adds all starting objects to the Scene.
+	 */
+	private function addEntities():Void {
+		add(hero);
+		add(hero.playerHealth);
 	}
 }
