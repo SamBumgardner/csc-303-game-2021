@@ -21,8 +21,6 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
-		hero = new Hero();
-		add(hero);
 
 		// Add door objects
 		doors = new FlxTypedGroup<Door>();
@@ -41,6 +39,8 @@ class PlayState extends FlxState
 		add(keys);
 
 		totalKeys = new TotalKeys();
+		hero = new Hero(0,32);
+		addEntities();
 	}
 
 	override public function update(elapsed:Float):Void
@@ -68,4 +68,11 @@ class PlayState extends FlxState
 			totalKeys.pickup();
 			key.pickup();
 		}
+	/**
+	 * Helper function that adds all starting objects to the Scene.
+	 */
+	private function addEntities():Void {
+		add(hero);
+		add(hero.playerHealth);
+	}
 }
