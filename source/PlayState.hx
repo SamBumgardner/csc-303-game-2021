@@ -1,5 +1,6 @@
 package;
 
+import actors.enemies.SwordProjectile;
 import actors.enemies.KnightEnemy;
 import actors.enemies.SlimeEnemy;
 import flixel.util.FlxColor;
@@ -26,8 +27,14 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		FlxG.overlap(hero, enemies, Enemy.playerTouchEnemy);
 		super.update(elapsed);
+		FlxG.overlap(hero, enemies, Enemy.playerTouchEnemy);
+		FlxG.overlap(hero, KnightEnemy.SWORDS, SwordProjectile.doDamage);
+		for (enemy in enemies) {
+			if (enemy.alive) {
+				Enemy.checkEnemyAttackRange(hero, enemy);
+			}
+		}
 	}
 
 	/**
@@ -36,8 +43,10 @@ class PlayState extends FlxState
 	private function addEntities():Void {
 		add(hero);
 		add(hero.playerHealth);
-    add(enemies);
-    addEnemies();
+    	add(enemies);
+    	addEnemies();
+		add(hero);
+		add(KnightEnemy.SWORDS);
 	}
 
 	/*

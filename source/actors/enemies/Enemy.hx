@@ -23,20 +23,26 @@ class Enemy extends FlxSprite {
     public static var SPEED:Float = 140;
 
     private static var DRAG:Float = 8;
+    private static var ATTACK_RANGE:Float = 120;
 
     // Animation strings
     public static var LEFT_RIGHT:String = "lr";
     public static var UP:String = "u";
     public static var DOWN:String = "d";
     public static var ATTACK:String = "attack";
+    public static var TAKING_DAMAGE:String = "taking damage";
 
     private var type:EnemyType;
     private var spriteWidth:Int;
     private var spriteHeight:Int;
     private var playerPosition:FlxPoint;
+    private var justTookDamage:Bool = false;
+    private var attackTimer:Float;
 
     private var state:State;
     private var states:Vector<State> = new Vector<State>(2);
+    private var seesPlayer:Bool = true; //hard coded until we have tilemap to do ray tracing
+
 
     public function new(X:Float, Y:Float, type:EnemyType, spriteWidth:Int, spriteHeight:Int, width:Float, height:Float, offsetX:Float, offsetY:Float, health:Float) {
         super(X,Y);
@@ -91,8 +97,13 @@ class Enemy extends FlxSprite {
             }
         }
 
-        switch (facing) {
-            case FlxObject.LEFT, FlxObject.RIGHT:
+        if (justTookDamage) {
+            animation.play(TAKING_DAMAGE);
+            justTookDamage = false;
+        }
+        else if (state == states[EnemyStates.IDLE]) {
+            switch (facing) {
+                case FlxObject.LEFT, FlxObject.RIGHT:
                     animation.play(LEFT_RIGHT);
 
                 case FlxObject.UP:
@@ -100,7 +111,12 @@ class Enemy extends FlxSprite {
 
                 case FlxObject.DOWN:
                     animation.play(DOWN);
+            }
+        } else if (state == states[EnemyStates.COMBAT]) {
+            animation.play(ATTACK);
         }
+        
+
         state.update(elapsed);
         super.update(elapsed);
     }
@@ -136,8 +152,50 @@ class Enemy extends FlxSprite {
      * @param damageAmount an integer value in fragments (4 per heart) to be hurt the player
      * @return void
 	 */
-    public override function hurt(damageAmount:Float):Void {
+    override public function hurt(damageAmount:Float):Void {
+        justTookDamage = true;
         super.hurt(damageAmount);
-        //play damaged animation if health is above 1, otherwise play death animation
+    }
+
+    /**
+	 * Override of FlxBasic kill function to display a death animation.
+     * @author Matt Lippelman
+     * @param damageAmount an integer value in fragments (4 per heart) to be hurt the player
+     * @return void
+	 */
+    override public function kill() {
+        //play the death animation
+        super.kill();
+    }
+
+    /**
+	 * This function is meant to be overriden by child classes. This function is called when
+     * the enemy is in the Combat state
+     * @author Matt Lippelman
+     * @param elapsed the elapsed time
+     * @return void
+	 */
+    public function attack(elapsed:Float):Void {
+        trace("attack function not implemented");
+    }
+
+    /**
+	 * This function will check to see if the player is within the attack range of an enemy.
+     * If the player is in range, it will switch the enemy to Combat state.
+     * @author Matt Lippelman
+     * @param player the Hero object
+     * @param enemy an enemy object to be checked
+     * @return void
+	 */
+    public static function checkEnemyAttackRange(player:Hero, enemy:Enemy):Void {
+        var playerMid:FlxPoint = player.getMidpoint();
+        var enemyMid:FlxPoint = enemy.getMidpoint();
+        var distance:Float = Math.sqrt(Math.pow(playerMid.x - enemyMid.x,2) + Math.pow(playerMid.y - enemyMid.y, 2));
+        if (Math.abs(distance) <= ATTACK_RANGE && enemy.seesPlayer) {
+            enemy.playerPosition = playerMid;
+            enemy.state = enemy.states[EnemyStates.COMBAT];
+        } else {
+            enemy.state = enemy.states[EnemyStates.IDLE];
+        }
     }
 }

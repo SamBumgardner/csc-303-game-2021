@@ -8,6 +8,7 @@ class CombatState extends EnemyState {
     }
 
     override public function update(elapsed:Float) {
-        managedEnemy.kill();
+        this.managedEnemy.velocity.set(0, 0);
+        managedEnemy.attack(elapsed);
     }
 }
