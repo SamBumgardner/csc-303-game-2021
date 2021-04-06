@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="left-up" width="80" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="17">
+ <tileset firstgid="1" source="../../../../../Ogmo Projects/Tiled/csc303-class-project/grasslandTilesetA.tsx"/>
+ <objectgroup id="2" name="walls">
+  <object id="1" gid="1" x="193.333" y="242.667" width="16" height="16"/>
+  <object id="2" gid="1" x="245.5" y="245" width="16" height="16"/>
+  <object id="3" gid="1" x="208.5" y="241" width="16" height="16"/>
+  <object id="4" gid="1" x="196" y="245" width="16" height="16"/>
+  <object id="5" gid="1" x="214.5" y="254" width="16" height="16"/>
+  <object id="6" gid="1" x="253.5" y="260.5" width="16" height="16"/>
+  <object id="7" gid="1" x="251.5" y="274" width="16" height="16"/>
+  <object id="8" gid="1" x="260" y="290" width="16" height="16"/>
+  <object id="9" gid="1" x="271" y="275" width="16" height="16"/>
+  <object id="10" gid="164" x="304.5" y="272" width="16" height="16"/>
+  <object id="11" gid="164" x="320.5" y="272.5" width="16" height="16"/>
+  <object id="12" gid="164" x="336.5" y="272.5" width="16" height="16"/>
+  <object id="13" gid="164" x="352.5" y="272.5" width="16" height="16"/>
+  <object id="14" gid="164" x="367.5" y="272.5" width="16" height="16"/>
+  <object id="15" gid="164" x="384.5" y="272" width="16" height="16"/>
+  <object id="16" gid="164" x="400" y="272" width="16" height="16"/>
+ </objectgroup>
+</map>

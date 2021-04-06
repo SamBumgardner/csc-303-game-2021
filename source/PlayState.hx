@@ -8,8 +8,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.FlxObject;
+import states.LevelState;
 
-class PlayState extends FlxState
+class PlayState extends LevelState
 {
 	private var hero:Hero;
 	private var doors:FlxTypedGroup<Door>;
