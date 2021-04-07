@@ -1,6 +1,5 @@
 package;
 
-<<<<<<< HEAD
 import actors.enemies.DragonBoss;
 import actors.enemies.Projectile;
 import actors.enemies.KnightEnemy;
@@ -10,10 +9,8 @@ import actors.enemies.BatEnemy;
 import flixel.FlxG;
 import actors.enemies.Enemy;
 import flixel.group.FlxGroup;
-=======
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
->>>>>>> 1b2e1535132d979cc33b0a25ac7c47c13fb89821
 import actors.player.Hero;
 import environment.Door;
 import environment.TotalKeys;
@@ -39,7 +36,6 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
-		bgColor =  FlxColor.fromString("0xababab");
 
 
 		//add level
