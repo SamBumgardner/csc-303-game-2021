@@ -9,8 +9,8 @@ import flixel.FlxSprite;
 
 class Hero extends FlxSprite {
 
-    public static var WIDTH(default, never):Int = 32;
-    public static var HEIGHT(default, never):Int = 32;
+    public static var WIDTH(default, never):Int = 16;
+    public static var HEIGHT(default, never):Int = 16;
 
     public static var BASE_MOVE_SPEED:Float = 200;
 
