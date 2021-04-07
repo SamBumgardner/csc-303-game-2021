@@ -4,8 +4,6 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
-import flixel.util.FlxColor;
-import flixel.util.FlxSave;
 
 class GameOverState extends FlxState
 {
