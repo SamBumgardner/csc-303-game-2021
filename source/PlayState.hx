@@ -1,5 +1,6 @@
 package;
 
+<<<<<<< HEAD
 import actors.enemies.DragonBoss;
 import actors.enemies.Projectile;
 import actors.enemies.KnightEnemy;
@@ -9,6 +10,10 @@ import actors.enemies.BatEnemy;
 import flixel.FlxG;
 import actors.enemies.Enemy;
 import flixel.group.FlxGroup;
+=======
+import flixel.tile.FlxTilemap;
+import flixel.addons.editors.ogmo.FlxOgmo3Loader;
+>>>>>>> 1b2e1535132d979cc33b0a25ac7c47c13fb89821
 import actors.player.Hero;
 import environment.Door;
 import environment.TotalKeys;
@@ -28,10 +33,22 @@ class PlayState extends FlxState
 	private var key:Key;
 	private var totalKeys:TotalKeys;
 
+	private var map:FlxOgmo3Loader;
+	private var walls:FlxTilemap;
+
 	override public function create():Void
 	{
 		super.create();
 		bgColor =  FlxColor.fromString("0xababab");
+
+
+		//add level
+		map = new FlxOgmo3Loader(AssetPaths.csc303_game_levels__ogmo, AssetPaths.level01__json);
+		walls = map.loadTilemap(AssetPaths.wallTile__png, "walls");
+		walls.follow();
+		walls.setTileProperties(1, FlxObject.NONE);
+		walls.setTileProperties(2, FlxObject.ANY);
+		add(walls);
 /*
 		// Add door objects
 		doors = new FlxTypedGroup<Door>();
@@ -50,9 +67,11 @@ class PlayState extends FlxState
 		add(keys);
 */
 		totalKeys = new TotalKeys();
-		hero = new Hero(0,32);
 		enemies = new FlxTypedGroup<Enemy>();
+		hero = new Hero();
+		map.loadEntities(placeEntities, "entities");
 		addEntities();
+		
 	}
 
 	override public function update(elapsed:Float):Void
@@ -69,8 +88,10 @@ class PlayState extends FlxState
 				Enemy.checkEnemyAttackRange(hero, enemy);
 			}
 		}
+		
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
+		FlxG.collide(hero, walls);
 		FlxG.collide(hero, doors);
 	}
 
@@ -118,5 +139,13 @@ class PlayState extends FlxState
 		}
 		*/
 		enemies.add(new DragonBoss(300, 300));
+	}
+
+	// places hero in correct spawn position
+	private function placeEntities(entity:EntityData) {
+		if (entity.name == "hero")
+			{
+				hero.setPosition(entity.x, entity.y);
+			}
 	}
 }
