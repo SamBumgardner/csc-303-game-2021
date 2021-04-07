@@ -1,6 +1,6 @@
 package;
 
-import states.GameOverState;
+
 import flixel.util.FlxColor;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -90,7 +90,7 @@ class PlayState extends FlxState
 
 	function doneFadeOut()
 	{
-		FlxG.switchState(new GameOverState());	
+		FlxG.switchState(new states.GameOverState());	
 	}
 
 	// Opens locked doors if you have a key
