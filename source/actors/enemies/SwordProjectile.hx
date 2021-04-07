@@ -10,7 +10,6 @@ import flixel.FlxSprite;
 class SwordProjectile extends FlxSprite {
 
     public static var SPEED:Float = 140;
-    public static var DAMAGE:Float = 2;
     
     private static var WIDTH:Int = 16;
     private static var HEIGHT:Int = 16;
@@ -40,7 +39,7 @@ class SwordProjectile extends FlxSprite {
         this.x = spawnPoint.x;
         this.y = spawnPoint.y;
         var targetVector:FlxVector = FlxVector.weak(target.x - spawnPoint.x, target.y - spawnPoint.y);
-        var radians = FlxVector.weak(1, 0).radiansBetween(targetVector);
+        var radians:Float = FlxVector.weak(1, 0).radiansBetween(targetVector);
         direction = FlxVector.weak(1,0);
         if (target.y < spawnPoint.y) {
             radians = -radians;
@@ -86,7 +85,7 @@ class SwordProjectile extends FlxSprite {
 	 */
     public static function doDamage(player:Hero, sword:SwordProjectile):Void {
         if (player.alive && player.exists && sword.alive && sword.exists) {
-            player.hurt(DAMAGE);
+            player.hurt(KnightEnemy.DAMAGE);
             sword.kill();
         }
     }

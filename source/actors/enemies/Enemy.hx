@@ -1,7 +1,6 @@
 package actors.enemies;
 
 
-import flixel.system.FlxAssets.FlxGraphicAsset;
 import actors.enemies.fsm.states.Combat.CombatState;
 import actors.enemies.fsm.states.Idle.IdleState;
 import actors.enemies.fsm.EnemyStates;
@@ -59,6 +58,7 @@ class Enemy extends FlxSprite {
         setFacingFlip(FlxObject.RIGHT, true, false);
         initializeGraphics();
         setupFSM();
+        attackTimer = 0;
     }
 
     /**
@@ -112,10 +112,10 @@ class Enemy extends FlxSprite {
                 case FlxObject.DOWN:
                     animation.play(DOWN);
             }
+            attackTimer -= elapsed;
         } else if (state == states[EnemyStates.COMBAT]) {
             animation.play(ATTACK);
         }
-        
 
         state.update(elapsed);
         super.update(elapsed);
@@ -142,6 +142,7 @@ class Enemy extends FlxSprite {
      * @return void
 	 */
     private function startCombat(player:Hero):Void {
+        velocity.set(0, 0);
         state = states[EnemyStates.COMBAT];
         trace("Hero is now in combat with enemy");
     }
@@ -197,5 +198,21 @@ class Enemy extends FlxSprite {
         } else {
             enemy.state = enemy.states[EnemyStates.IDLE];
         }
+    }
+
+    public static function handleOverlap(player:Hero, enemy:Enemy):Void {
+        var damage:Float = 0;
+        if (Std.is(enemy, SlimeEnemy)) {
+            damage = SlimeEnemy.DAMAGE;
+        } else if (Std.is(enemy, BatEnemy)) {
+            damage = BatEnemy.DAMAGE;
+        }
+
+        trace(damage);
+        if (player.alive && player.exists && enemy.alive && enemy.exists && enemy.attackTimer <= 0) {
+            player.hurt(damage);
+            enemy.attackTimer = Std.is(enemy, SlimeEnemy) ? SlimeEnemy.ATTACK_SPEED : (Std.is(enemy, BatEnemy) ? BatEnemy.ATTACK_SPEED : 5);
+        }
+        enemy.velocity.set(0,0);
     }
 }

@@ -58,8 +58,10 @@ class PlayState extends FlxState
 	{
 		// Checks if hero is collideing with doors or keys
 		super.update(elapsed);
-		FlxG.overlap(hero, enemies, Enemy.playerTouchEnemy);
+		// Check enemy overlap
+		FlxG.overlap(hero, enemies, Enemy.handleOverlap);
 		FlxG.overlap(hero, KnightEnemy.SWORDS, SwordProjectile.doDamage);
+		// check enemy attack range to see if they should start attacking
 		for (enemy in enemies) {
 			if (enemy.alive) {
 				Enemy.checkEnemyAttackRange(hero, enemy);
@@ -102,13 +104,13 @@ class PlayState extends FlxState
 	 * Added to test movement and loading of enemies
 	 */
   	private function addEnemies() {
-		for (val in 0...5) {
+		for (val in 0...2) {
 			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
-		for (val in 0...3) {
+		for (val in 0...2) {
 			enemies.add(new SlimeEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
-		for (val in 0...3) {
+		for (val in 0...2) {
 			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
 	}
