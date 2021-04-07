@@ -1,5 +1,7 @@
 package;
 
+import flixel.tile.FlxTilemap;
+import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import actors.player.Hero;
 import environment.Door;
 import environment.TotalKeys;
@@ -18,9 +20,20 @@ class PlayState extends FlxState
 	private var key:Key;
 	private var totalKeys:TotalKeys;
 
+	private var map:FlxOgmo3Loader;
+	private var walls:FlxTilemap;
+
 	override public function create():Void
 	{
 		super.create();
+
+		//add level
+		map = new FlxOgmo3Loader(AssetPaths.csc303_game_levels__ogmo, AssetPaths.level01__json);
+		walls = map.loadTilemap(AssetPaths.wallTile__png, "walls");
+		walls.follow();
+		walls.setTileProperties(1, FlxObject.NONE);
+		walls.setTileProperties(2, FlxObject.ANY);
+		add(walls);
 
 		// Add door objects
 		doors = new FlxTypedGroup<Door>();
@@ -39,16 +52,20 @@ class PlayState extends FlxState
 		add(keys);
 
 		totalKeys = new TotalKeys();
-		hero = new Hero(0,32);
+		hero = new Hero();
+		map.loadEntities(placeEntities, "entities");
 		addEntities();
+		
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		// Checks if hero is collideing with doors or keys		
 		super.update(elapsed);
+		
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
+		FlxG.collide(hero, walls);
 		FlxG.collide(hero, doors);
 	}
 
@@ -74,5 +91,13 @@ class PlayState extends FlxState
 	private function addEntities():Void {
 		add(hero);
 		add(hero.playerHealth);
+	}
+
+	// places hero in correct spawn position
+	private function placeEntities(entity:EntityData) {
+		if (entity.name == "hero")
+			{
+				hero.setPosition(entity.x, entity.y);
+			}
 	}
 }
