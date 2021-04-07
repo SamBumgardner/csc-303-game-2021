@@ -14,19 +14,21 @@ class IdleState extends EnemyState {
     }
 
     override public function update(elapsed:Float) {
-        if (idleTimer <= 0) {
-            if (FlxG.random.bool(1)) {
-                moveDirection = -1;
-                this.managedEnemy.velocity.x = this.managedEnemy.velocity.y = 0;
-            } else {
-                moveDirection = FlxG.random.int(0,8) * 45;
+        if (managedEnemy.type == REGULAR) {
+            if (idleTimer <= 0) {
+                if (FlxG.random.bool(1)) {
+                    moveDirection = -1;
+                    this.managedEnemy.velocity.x = this.managedEnemy.velocity.y = 0;
+                } else {
+                    moveDirection = FlxG.random.int(0,8) * 45;
 
-                this.managedEnemy.velocity.set(Enemy.SPEED * 0.5, 0);
-                this.managedEnemy.velocity.rotate(FlxPoint.weak(), moveDirection);
+                    this.managedEnemy.velocity.set(Enemy.SPEED * 0.5, 0);
+                    this.managedEnemy.velocity.rotate(FlxPoint.weak(), moveDirection);
+                }
+                idleTimer = FlxG.random.int(1, 4);
+            } else {
+                idleTimer -= elapsed;
             }
-            idleTimer = FlxG.random.int(1, 4);
-        } else {
-            idleTimer -= elapsed;
         }
     }
 }

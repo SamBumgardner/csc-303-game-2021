@@ -23,6 +23,7 @@ class Enemy extends FlxSprite {
 
     private static var DRAG:Float = 8;
     private static var ATTACK_RANGE:Float = 120;
+    private static var BOSS_ATTACK_RANGE:Float = 250;
 
     // Animation strings
     public static var LEFT_RIGHT:String = "lr";
@@ -31,7 +32,7 @@ class Enemy extends FlxSprite {
     public static var ATTACK:String = "attack";
     public static var TAKING_DAMAGE:String = "taking damage";
 
-    private var type:EnemyType;
+    public var type(default, null):EnemyType;
     private var spriteWidth:Int;
     private var spriteHeight:Int;
     private var playerPosition:FlxPoint;
@@ -191,8 +192,9 @@ class Enemy extends FlxSprite {
     public static function checkEnemyAttackRange(player:Hero, enemy:Enemy):Void {
         var playerMid:FlxPoint = player.getMidpoint();
         var enemyMid:FlxPoint = enemy.getMidpoint();
+        var attackRange:Float = enemy.type == REGULAR ? ATTACK_RANGE : BOSS_ATTACK_RANGE;
         var distance:Float = Math.sqrt(Math.pow(playerMid.x - enemyMid.x,2) + Math.pow(playerMid.y - enemyMid.y, 2));
-        if (Math.abs(distance) <= ATTACK_RANGE && enemy.seesPlayer) {
+        if (Math.abs(distance) <= attackRange && enemy.seesPlayer) {
             enemy.playerPosition = playerMid;
             enemy.state = enemy.states[EnemyStates.COMBAT];
         } else {

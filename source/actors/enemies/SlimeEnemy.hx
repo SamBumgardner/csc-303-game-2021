@@ -20,7 +20,6 @@ class SlimeEnemy extends Enemy {
         super(X, Y, REGULAR, WIDTH, HEIGHT, HIT_BOX_WIDTH, HIT_BOX_HEIGHT, OFFSET_X, OFFSET_Y, HEALTH);
         addAnimations();
         attackTimer = 0;
-        health = HEALTH;
     }
 
     /**

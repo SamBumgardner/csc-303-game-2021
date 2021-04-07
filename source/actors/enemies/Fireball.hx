@@ -1,17 +1,17 @@
 package actors.enemies;
 
-class SwordProjectile extends Projectile {
-
-    public static var SPEED:Float = 140;
+class Fireball extends Projectile {
     
+    public static var SPEED:Float = 120;
+
     private static var WIDTH:Int = 16;
     private static var HEIGHT:Int = 16;
-    private static var OFFSET_X:Float = 8;
-    private static var OFFSET_Y:Float = 8;
+    private static var OFFSET_X:Float = 0;
+    private static var OFFSET_Y:Float = 0;
 
     public function new(?X:Float=0, ?Y:Float=0):Void {
         super(X,Y, SPEED);
-        loadGraphic(AssetPaths.KnightProjectile__png);
+        loadGraphic(AssetPaths.Fireball__png);
         width = WIDTH;
         height = HEIGHT;
         offset.x = OFFSET_X;

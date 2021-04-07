@@ -1,6 +1,7 @@
 package;
 
-import actors.enemies.SwordProjectile;
+import actors.enemies.DragonBoss;
+import actors.enemies.Projectile;
 import actors.enemies.KnightEnemy;
 import actors.enemies.SlimeEnemy;
 import flixel.util.FlxColor;
@@ -31,7 +32,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		bgColor =  FlxColor.fromString("0xababab");
-
+/*
 		// Add door objects
 		doors = new FlxTypedGroup<Door>();
 		door = new Door(50, 50);
@@ -47,7 +48,7 @@ class PlayState extends FlxState
 		key = new Key(300, 300);
 		keys.add(key);
 		add(keys);
-
+*/
 		totalKeys = new TotalKeys();
 		hero = new Hero(0,32);
 		enemies = new FlxTypedGroup<Enemy>();
@@ -60,7 +61,8 @@ class PlayState extends FlxState
 		super.update(elapsed);
 		// Check enemy overlap
 		FlxG.overlap(hero, enemies, Enemy.handleOverlap);
-		FlxG.overlap(hero, KnightEnemy.SWORDS, SwordProjectile.doDamage);
+		FlxG.overlap(hero, KnightEnemy.SWORDS, Projectile.doDamage);
+		FlxG.overlap(hero, DragonBoss.FIREBALLS, Projectile.doDamage);
 		// check enemy attack range to see if they should start attacking
 		for (enemy in enemies) {
 			if (enemy.alive) {
@@ -98,13 +100,14 @@ class PlayState extends FlxState
     	addEnemies();
 		add(hero);
 		add(KnightEnemy.SWORDS);
+		add(DragonBoss.FIREBALLS);
 	}
 
 	/*
 	 * Added to test movement and loading of enemies
 	 */
   	private function addEnemies() {
-		for (val in 0...2) {
+		/*for (val in 0...2) {
 			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
 		for (val in 0...2) {
@@ -113,5 +116,7 @@ class PlayState extends FlxState
 		for (val in 0...2) {
 			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
+		*/
+		enemies.add(new DragonBoss(300, 300));
 	}
 }
