@@ -1,5 +1,7 @@
 package;
 
+import states.GameOverState;
+import flixel.util.FlxColor;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import actors.player.Hero;
@@ -22,6 +24,11 @@ class PlayState extends FlxState
 
 	private var map:FlxOgmo3Loader;
 	private var walls:FlxTilemap;
+	private var ending:Bool;
+	private var won:Bool;
+
+	private var exitX = 270;
+	private var exitY = 480;
 
 	override public function create():Void
 	{
@@ -62,11 +69,28 @@ class PlayState extends FlxState
 	{
 		// Checks if hero is collideing with doors or keys		
 		super.update(elapsed);
-		
+
+		if (ending)
+			{
+				return;
+			}
+
+		if (hero.x > exitX && hero.y > exitY)
+			{
+				won = true;
+				ending = true;
+				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, doneFadeOut);
+			}
+
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
 		FlxG.collide(hero, walls);
 		FlxG.collide(hero, doors);
+	}
+
+	function doneFadeOut()
+	{
+		FlxG.switchState(new GameOverState());	
 	}
 
 	// Opens locked doors if you have a key
