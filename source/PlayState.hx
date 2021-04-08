@@ -44,7 +44,7 @@ class PlayState extends FlxState
 		add(walls);
 
 		//add levelExit
-		levelExit = new LevelExit(270, 460);
+		levelExit = new LevelExit(270, 430);
 		add(levelExit);
 
 		// Add door objects
