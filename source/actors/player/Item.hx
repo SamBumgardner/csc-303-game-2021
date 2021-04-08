@@ -1,11 +1,15 @@
 package actors.player;
 
+import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 
 class Item extends FlxSprite 
 {
+    private var owner:FlxSprite;
+    private var timer:FlxTimer;
+
     private var up:Bool = false;
     private var down:Bool = false;
     private var left:Bool = false;
@@ -14,9 +18,11 @@ class Item extends FlxSprite
     var xMod:Float = 0;
     var yMod:Float = 0;
 
-    public function new() {
+    public function new(owner:FlxSprite) {
         super();
         makeGraphic(1,1);
+        this.owner = owner;
+        timer = new FlxTimer();
     }
     override public function update(elapsed:Float):Void
         {
@@ -26,33 +32,38 @@ class Item extends FlxSprite
             right = FlxG.keys.pressed.RIGHT;
 
             if (up)
-                {
-                    newAngle = -90;
-                    if (left)
-                        newAngle -= 45;
-                    else if (right)
-                        newAngle += 45;
-                    facing = FlxObject.UP;
-                }
-                else if (down)
-                {
-                    newAngle = 90;
-                    if (left)
-                        newAngle += 45;
-                    else if (right)
-                        newAngle -= 45;
-                    facing = FlxObject.DOWN;
-                }
-                else if (left)
-                {
-                    newAngle = 180;
-                    facing = FlxObject.LEFT;
-                }
+            {
+                newAngle = -90;
+                if (left)
+                    newAngle -= 45;
                 else if (right)
-                {
-                    newAngle = 0;
-                    facing = FlxObject.RIGHT;
-                }
+                    newAngle += 45;
+            }
+            else if (down)
+            {
+                newAngle = 90;
+                if (left)
+                    newAngle += 45;
+                else if (right)
+                    newAngle -= 45;
+            }
+            else if (left)
+            {
+                newAngle = 180;
+            }
+            else if (right)
+            {
+                newAngle = 0;
+            }
+
+            if (FlxG.keys.justPressed.A)
+            {
+                useItem();
+                timer.start(0.2, swing, 1);
+            }
+            pos(owner.x + 12, owner.y + 12);
+
+            super.update(elapsed);
         }
 
     public function useItem()
@@ -92,22 +103,24 @@ class Item extends FlxSprite
                 xMod = -40;
                 yMod = 0;
             }
-
-        angle = newAngle;
-        makeGraphic(50,10);
         
+        angle = newAngle;
+        trace("Increasing graphic size");
+        makeGraphic(50,10);
     }
 
-    public function swing()
-        {
-            makeGraphic(1,1);
-            xMod = 0;
-            yMod = 0;
-        }
+    public function swing(timer:FlxTimer)
+    {
+        trace("decreasing graphic size");
+        makeGraphic(1,1);
+
+        xMod = 0;
+        yMod = 0;
+    }
 
     public function pos(hX, hY)
-        {
-            x = hX + xMod;
-            y = hY + yMod;
-        }
+    {
+        x = hX + xMod;
+        y = hY + yMod;
+    }
 }
