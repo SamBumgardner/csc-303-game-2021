@@ -71,7 +71,6 @@ class Hero extends FlxSprite {
         else if (horizontalDirection < 0) {
             facing = FlxObject.LEFT;
         }
-
         if (verticalDirection > 0) {
             facing = FlxObject.DOWN;
         }

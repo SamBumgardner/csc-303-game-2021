@@ -3,7 +3,6 @@ package;
 import actors.player.Hero;
 import actors.player.Item;
 import flixel.FlxState;
-import flixel.FlxG;
 
 class PlayState extends FlxState
 {

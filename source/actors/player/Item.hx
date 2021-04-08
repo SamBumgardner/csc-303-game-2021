@@ -1,5 +1,6 @@
 package actors.player;
 
+import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
