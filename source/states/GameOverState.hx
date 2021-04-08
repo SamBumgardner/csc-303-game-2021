@@ -11,7 +11,7 @@ class GameOverState extends FlxState
     private var playButton:FlxButton;
     
 
-    override public function create()
+    override public function create():Void
         {
             titleText = new FlxText(0, 20, 0, "You Win!", 22);
             titleText.alignment = CENTER;

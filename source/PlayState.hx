@@ -1,6 +1,8 @@
 package;
 
 
+import environment.LevelExit;
+import states.GameOverState;
 import flixel.util.FlxColor;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
@@ -27,8 +29,7 @@ class PlayState extends FlxState
 	private var ending:Bool;
 	private var won:Bool;
 
-	private var exitX = 270;
-	private var exitY = 480;
+	private var levelExit:LevelExit;
 
 	override public function create():Void
 	{
@@ -41,6 +42,10 @@ class PlayState extends FlxState
 		walls.setTileProperties(1, FlxObject.NONE);
 		walls.setTileProperties(2, FlxObject.ANY);
 		add(walls);
+
+		//add levelExit
+		levelExit = new LevelExit(270, 460);
+		add(levelExit);
 
 		// Add door objects
 		doors = new FlxTypedGroup<Door>();
@@ -75,10 +80,10 @@ class PlayState extends FlxState
 				return;
 			}
 
-		if (hero.x > exitX && hero.y > exitY)
+		if (FlxG.overlap(hero, levelExit))
 			{
-				won = true;
 				ending = true;
+				won = true;
 				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, doneFadeOut);
 			}
 
@@ -88,7 +93,7 @@ class PlayState extends FlxState
 		FlxG.collide(hero, doors);
 	}
 
-	function doneFadeOut()
+	private function doneFadeOut()
 	{
 		FlxG.switchState(new states.GameOverState());	
 	}
