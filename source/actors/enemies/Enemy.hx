@@ -210,7 +210,6 @@ class Enemy extends FlxSprite {
             damage = BatEnemy.DAMAGE;
         }
 
-        trace(damage);
         if (player.alive && player.exists && enemy.alive && enemy.exists && enemy.attackTimer <= 0) {
             player.hurt(damage);
             enemy.attackTimer = Std.is(enemy, SlimeEnemy) ? SlimeEnemy.ATTACK_SPEED : (Std.is(enemy, BatEnemy) ? BatEnemy.ATTACK_SPEED : 5);

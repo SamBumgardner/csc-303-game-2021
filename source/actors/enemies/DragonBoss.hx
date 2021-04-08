@@ -40,7 +40,7 @@ class DragonBoss extends Enemy {
     }
 
     override public function attack(elapsed:Float) {
-        var fireball_x_offset:Float = -50;
+        var fireball_x_offset:Float = -25;
         if (playerPosition.x > this.x) {
             this.facing = FlxObject.RIGHT;
             fireball_x_offset = - fireball_x_offset;
@@ -49,7 +49,7 @@ class DragonBoss extends Enemy {
         }
         if (attackTimer <= 0) {
             var fireball:Fireball = FIREBALLS.recycle(Fireball);
-            fireball.setDirection(playerPosition, new FlxPoint(this.x + fireball_x_offset, this.y - 30));
+            fireball.setDirection(playerPosition, new FlxPoint(this.x + fireball_x_offset, this.y - 15));
             fireball.fire();
             attackTimer = ATTACK_SPEED;
         } else {
