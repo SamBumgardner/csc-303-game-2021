@@ -123,32 +123,6 @@ class Enemy extends FlxSprite {
     }
 
     /**
-	 * Function to check whether a Hero object is touching the Enemy object
-     * @author Matt Lippelman
-     * @param player the hero object touching the enemy
-     * @param enemy the enemy object touching the enemy
-     * @return void
-	 */
-    public static function playerTouchEnemy(player:Hero, enemy:Enemy):Void {
-        if (player.alive && player.exists && enemy.alive && enemy.exists) {
-            enemy.startCombat(player);
-        }
-    }
-
-    /**
-	 * Function to start combat with a player. This function will switch the enemy to COMBAT state and the 
-     * enemy will begin attacking.
-     * @author Matt Lippelman
-     * @param player the hero object the enemy should attack
-     * @return void
-	 */
-    private function startCombat(player:Hero):Void {
-        velocity.set(0, 0);
-        state = states[EnemyStates.COMBAT];
-        trace("Hero is now in combat with enemy");
-    }
-
-    /**
 	 * Override of FlxSprite hurt function.
      * @author Matt Lippelman
      * @param damageAmount an integer value in fragments (4 per heart) to be hurt the player
