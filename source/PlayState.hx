@@ -1,5 +1,8 @@
 package;
 
+
+import environment.LevelExit;
+import states.GameOverState;
 import actors.enemies.DragonBoss;
 import actors.enemies.Projectile;
 import actors.enemies.KnightEnemy;
@@ -32,6 +35,10 @@ class PlayState extends FlxState
 
 	private var map:FlxOgmo3Loader;
 	private var walls:FlxTilemap;
+	private var ending:Bool;
+	private var won:Bool;
+
+	private var levelExit:LevelExit;
 
 	override public function create():Void
 	{
@@ -45,6 +52,11 @@ class PlayState extends FlxState
 		walls.setTileProperties(1, FlxObject.NONE);
 		walls.setTileProperties(2, FlxObject.ANY);
 		add(walls);
+
+		//add levelExit
+		levelExit = new LevelExit(270, 430);
+		add(levelExit);
+
 /*
 		// Add door objects
 		doors = new FlxTypedGroup<Door>();
@@ -74,6 +86,18 @@ class PlayState extends FlxState
 	{
 		// Checks if hero is collideing with doors or keys
 		super.update(elapsed);
+
+		if (ending)
+			{
+				return;
+			}
+
+		if (FlxG.overlap(hero, levelExit))
+			{
+				ending = true;
+				won = true;
+				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, doneFadeOut);
+			}
 		// Check enemy overlap
 		FlxG.overlap(hero, enemies, Enemy.handleOverlap);
 		FlxG.overlap(hero, KnightEnemy.SWORDS, Projectile.doDamage);
@@ -90,6 +114,11 @@ class PlayState extends FlxState
 		FlxG.overlap(hero, keys, pickupKey);
 		FlxG.collide(hero, walls);
 		FlxG.collide(hero, doors);
+	}
+
+	private function doneFadeOut()
+	{
+		FlxG.switchState(new states.GameOverState());	
 	}
 
 	// Opens locked doors if you have a key
