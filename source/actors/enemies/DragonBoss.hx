@@ -10,8 +10,8 @@ class DragonBoss extends Enemy {
     private static var HEIGHT(default, never):Int = 64;
     private static var HIT_BOX_WIDTH(default, never):Float = 40;
     private static var HIT_BOX_HEIGHT(default, never):Float = 40;
-    private static var OFFSET_X(default, never):Float = 24;
-    private static var OFFSET_Y(default, never):Float = 24;
+    private static var OFFSET_X(default, never):Float = 8;
+    private static var OFFSET_Y(default, never):Float = 8;
     private static var HEALTH(default, never):Float = 8;
 
     public static var DAMAGE(default, never):Float = 3;
@@ -27,7 +27,6 @@ class DragonBoss extends Enemy {
     private override function initializeGraphics():Void {
         loadGraphic(AssetPaths.DragonBoss__png, true, WIDTH, HEIGHT);
         offset.set(OFFSET_X, OFFSET_Y);
-        setGraphicSize(WIDTH * 2, HEIGHT * 2);
         width = HIT_BOX_WIDTH;
         height = HIT_BOX_HEIGHT;
     }

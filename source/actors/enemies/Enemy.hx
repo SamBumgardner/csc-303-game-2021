@@ -1,6 +1,7 @@
 package actors.enemies;
 
 
+import flixel.FlxG;
 import actors.enemies.fsm.states.Combat.CombatState;
 import actors.enemies.fsm.states.Idle.IdleState;
 import actors.enemies.fsm.EnemyStates;
@@ -33,16 +34,15 @@ class Enemy extends FlxSprite {
     public static var TAKING_DAMAGE:String = "taking damage";
 
     public var type(default, null):EnemyType;
+    public var playerPosition:FlxPoint;
+    public var seesPlayer:Bool;
+
     private var spriteWidth:Int;
     private var spriteHeight:Int;
-    private var playerPosition:FlxPoint;
     private var justTookDamage:Bool = false;
     private var attackTimer:Float;
-
     private var state:State;
     private var states:Vector<State> = new Vector<State>(2);
-    private var seesPlayer:Bool = true; //hard coded until we have tilemap to do ray tracing
-
 
     public function new(X:Float, Y:Float, type:EnemyType, spriteWidth:Int, spriteHeight:Int, width:Float, height:Float, offsetX:Float, offsetY:Float, health:Float) {
         super(X,Y);

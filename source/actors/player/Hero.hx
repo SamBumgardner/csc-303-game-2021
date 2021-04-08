@@ -73,7 +73,7 @@ class Hero extends FlxSprite {
             velocity = moveDirection.scale(BASE_MOVE_SPEED);
             velocity.x = Math.floor(velocity.x);
             velocity.y = Math.floor(velocity.y);
-            trace(velocity);
+            //trace(velocity);
         } else {
             velocity.x = 0;
             velocity.y = 0;

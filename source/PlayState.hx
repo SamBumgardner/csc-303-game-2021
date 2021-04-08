@@ -81,10 +81,11 @@ class PlayState extends FlxState
 		// check enemy attack range to see if they should start attacking
 		for (enemy in enemies) {
 			if (enemy.alive) {
+				checkEnemyVision(enemy);
 				Enemy.checkEnemyAttackRange(hero, enemy);
 			}
 		}
-		
+
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
 		FlxG.collide(hero, walls);
@@ -134,7 +135,7 @@ class PlayState extends FlxState
 			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
 		}
 		*/
-		enemies.add(new DragonBoss(300, 300));
+		enemies.add(new DragonBoss(75, 350));
 	}
 
 	// places hero in correct spawn position
@@ -143,5 +144,14 @@ class PlayState extends FlxState
 			{
 				hero.setPosition(entity.x, entity.y);
 			}
+	}
+
+	private function checkEnemyVision(enemy:Enemy) {
+		if (walls.ray(enemy.getMidpoint(), hero.getMidpoint())) {
+			enemy.seesPlayer = true;
+			enemy.playerPosition = hero.getMidpoint();
+		} else {
+			enemy.seesPlayer = false;
+		}
 	}
 }

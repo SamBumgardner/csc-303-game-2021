@@ -1,5 +1,6 @@
 package actors.enemies;
 
+import flixel.tile.FlxTilemap;
 import flixel.FlxSprite;
 import actors.player.Hero;
 import flixel.math.FlxVector;
