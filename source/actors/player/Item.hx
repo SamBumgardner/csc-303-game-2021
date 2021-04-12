@@ -1,6 +1,5 @@
 package actors.player;
 
-import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
@@ -17,7 +16,7 @@ class Item extends FlxSprite
     
     public function new(owner:FlxSprite) {
         super();
-        makeGraphic(1,1);
+        makeGraphic(0,0);
         this.owner = owner;
         timer = new FlxTimer();
     }
@@ -28,7 +27,7 @@ class Item extends FlxSprite
                     useItem();
                     timer.start(0.2, swing, 1);
                 }
-            pos(owner.x + 12, owner.y + 12);
+            pos(owner.x + 6, owner.y);
 
             super.update(elapsed);
         }
@@ -38,26 +37,26 @@ class Item extends FlxSprite
         if(owner.facing == FlxObject.UP)
             {
                 xMod = 0;
-                yMod = -40;
-                makeGraphic(10,50);
+                yMod = -15;
+                makeGraphic(4,18);
             }
         else if(owner.facing == FlxObject.DOWN)
             {
                 xMod = 0;
-                yMod = 0;
-                makeGraphic(10,50);
+                yMod = 15;
+                makeGraphic(4,18);
             }
         else if(owner.facing == FlxObject.LEFT)
             {
-                xMod = -40;
-                yMod = 0;
-                makeGraphic(50,10);
+                xMod = -22;
+                yMod = 6;
+                makeGraphic(18,4);
             }
         else if(owner.facing == FlxObject.RIGHT)
             {
-                xMod = 0;
-                yMod = 0;
-                makeGraphic(50,10);
+                xMod = 8;
+                yMod = 6;
+                makeGraphic(18,4);
             }       
     }
 
