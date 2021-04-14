@@ -19,6 +19,7 @@ class SlimeEnemy extends Enemy {
         attackTimer = 0;
         this.damage = damage;
         this.attackSpeed = attackSpeed;
+        this.attackRange = attackRange;
     }
 
     /**
@@ -28,7 +29,6 @@ class SlimeEnemy extends Enemy {
     private override function initializeGraphics():Void {
         loadGraphic(AssetPaths.Slime__png, true, WIDTH, HEIGHT);
         offset.set(OFFSET_X, OFFSET_Y);
-        setGraphicSize(WIDTH * 2, HEIGHT * 2);
         width = HIT_BOX_WIDTH;
         height = HIT_BOX_HEIGHT;
     }

@@ -37,7 +37,6 @@ class Enemy extends FlxSprite {
 
     public var type(default, null):EnemyType;
     public var targetPosition:FlxPoint;
-    public var seesPlayer:Bool;
 
     private var spriteWidth:Int;
     private var spriteHeight:Int;
@@ -120,6 +119,7 @@ class Enemy extends FlxSprite {
         super.update(elapsed);
 
         FlxG.collide(this, TARGETS);
+        FlxG.collide(this, WALLS);
     }
 
     /**
@@ -164,12 +164,10 @@ class Enemy extends FlxSprite {
         var targetMid:FlxPoint = target.getMidpoint();
         var enemyMid:FlxPoint = getMidpoint();
         var distance:Float = Math.sqrt(Math.pow(targetMid.x - enemyMid.x,2) + Math.pow(targetMid.y - enemyMid.y, 2));
-        if (Math.abs(distance) <= attackRange && seesPlayer) {
-            targetPosition = targetMid;
+        if (Math.abs(distance) <= attackRange) {
             return true;
         } else {
             return false;
-            targetPosition = null;
         }
     }
 
@@ -183,7 +181,6 @@ class Enemy extends FlxSprite {
 
     public function isTargetInVision(target:FlxObject):Bool {
         if (WALLS.ray(getMidpoint(), target.getMidpoint())) {
-            targetPosition = target.getMidpoint();
             return true;
         } else {
             return false;
@@ -193,10 +190,11 @@ class Enemy extends FlxSprite {
     public function targetFound():Bool {
         for (target in TARGETS) {
             if (isTargetInRange(target) && isTargetInVision(target)) {
-                trace("target found");
+                targetPosition = target.getMidpoint();
                 return true;
             }
         }
+        targetPosition = null;
         return false;
     }
 

@@ -1,6 +1,7 @@
 package;
 
 
+import flixel.FlxSprite;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import environment.LevelExit;
 import states.GameOverState;
@@ -38,6 +39,7 @@ class PlayState extends FlxState
 	private var walls:FlxTilemap;
 	private var ending:Bool;
 	private var won:Bool;
+	private var hudBackground:FlxSprite;
 
 	private var levelExit:LevelExit;
 
@@ -135,6 +137,7 @@ class PlayState extends FlxState
 		}
 
 	private function instantiateEntities():Void {
+		hudBackground = new FlxSprite().makeGraphic(FlxG.width, 30, FlxColor.BLACK);
 		levelExit = new LevelExit(270, 430);
 		totalKeys = new TotalKeys();
 		enemies = new FlxTypedGroup<Enemy>();
@@ -151,34 +154,26 @@ class PlayState extends FlxState
 		// add actors
 		add(hero);
     	add(enemies);
-    	addEnemies();
 		add(hero);
+		add(hudBackground);
+		add(hero.playerHealth);
 		add(KnightEnemy.SWORDS);
 		add(DragonBoss.FIREBALLS);
-	}
-
-	/*
-	 * Added to test movement and loading of enemies
-	 */
-  	private function addEnemies() {
-		/*for (val in 0...2) {
-			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
-		}
-		for (val in 0...2) {
-			enemies.add(new SlimeEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
-		}
-		for (val in 0...2) {
-			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
-		}
-		*/
-		enemies.add(new DragonBoss(75, 350));
 	}
 
 	// places hero in correct spawn position
 	private function placeEntities(entity:EntityData) {
 		if (entity.name == "hero")
-			{
-				hero.setPosition(entity.x, entity.y);
-			}
+		{
+			hero.setPosition(entity.x, entity.y);
+		} else if (entity.name == "dragonBoss") {
+			enemies.add(new DragonBoss(entity.x, entity.y));
+		} else if (entity.name == "bat") {
+			enemies.add(new BatEnemy(entity.x, entity.y));
+		} else if (entity.name == "slime") {
+			enemies.add(new SlimeEnemy(entity.x, entity.y));
+		} else if (entity.name == "knight") {
+			enemies.add(new KnightEnemy(entity.x, entity.y));
+		}
 	}
 }

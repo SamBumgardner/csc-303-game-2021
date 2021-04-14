@@ -16,12 +16,13 @@ class DragonBoss extends Enemy {
 
     public static var FIREBALLS(default, never):FlxTypedGroup<Fireball> = new FlxTypedGroup<Fireball>();
 
-    public function new(X:Float, Y:Float, ?damage:Float=0, ?attackRange:Float=120, ?attackSpeed:Float=1) {
+    public function new(X:Float, Y:Float, ?damage:Float=0, ?attackRange:Float=150, ?attackSpeed:Float=1) {
         super(X, Y, BOSS, WIDTH, HEIGHT, HIT_BOX_WIDTH, HIT_BOX_HEIGHT, OFFSET_X, OFFSET_Y, HEALTH);
         addAnimations();
         attackTimer = 0;
         this.damage = damage;
         this.attackSpeed = attackSpeed;
+        this.attackRange = attackRange;
         this.immovable = true;
     }
 
