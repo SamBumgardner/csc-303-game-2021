@@ -15,6 +15,7 @@ import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import actors.player.Hero;
+import actors.player.Item;
 import environment.Door;
 import environment.TotalKeys;
 import environment.Key;
@@ -26,6 +27,7 @@ import flixel.FlxObject;
 class PlayState extends FlxState
 {
 	private var hero:Hero;
+	private var sword:Item;
 	private var enemies:FlxTypedGroup<Enemy>;
 	private var doors:FlxTypedGroup<Door>;
 	private var door:Door;
@@ -77,6 +79,9 @@ class PlayState extends FlxState
 		totalKeys = new TotalKeys();
 		enemies = new FlxTypedGroup<Enemy>();
 		hero = new Hero();
+		add(hero);
+		sword = new Item(hero);
+		add(sword);
 		map.loadEntities(placeEntities, "entities");
 		addEntities();
 		
