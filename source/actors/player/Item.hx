@@ -16,7 +16,7 @@ class Item extends FlxSprite
     
     public function new(owner:FlxSprite) {
         super();
-        makeGraphic(0,0);
+        makeGraphic(1,1);
         this.owner = owner;
         timer = new FlxTimer();
     }
