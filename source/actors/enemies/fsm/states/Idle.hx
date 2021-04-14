@@ -2,6 +2,7 @@ package actors.enemies.fsm.states;
 
 import flixel.math.FlxPoint;
 import flixel.FlxG;
+import flixel.FlxObject;
 
 class IdleState extends EnemyState {
 
@@ -13,8 +14,26 @@ class IdleState extends EnemyState {
         super(enemy);
     }
 
-    override public function update(elapsed:Float) {
+    override public function handleState():Int {
+        if (managedEnemy.targetFound()) {
+            return EnemyStates.COMBAT;
+        }
+        return super.handleState();
+    }
+
+    override public function update(elapsed:Float):Void {
         if (managedEnemy.type == REGULAR) {
+            switch (managedEnemy.facing) {
+                case FlxObject.LEFT, FlxObject.RIGHT:
+                    managedEnemy.animation.play(Enemy.LEFT_RIGHT);
+
+                case FlxObject.UP:
+                    managedEnemy.animation.play(Enemy.UP);
+
+                case FlxObject.DOWN:
+                    managedEnemy.animation.play(Enemy.DOWN);
+            }
+
             if (idleTimer <= 0) {
                 if (FlxG.random.bool(1)) {
                     moveDirection = -1;
@@ -30,5 +49,6 @@ class IdleState extends EnemyState {
                 idleTimer -= elapsed;
             }
         }
+        managedEnemy.decrementAttackTimer(elapsed);
     }
 }

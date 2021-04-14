@@ -10,11 +10,13 @@ class Projectile extends FlxSprite {
 
     private var speed:Float;
     private var direction:FlxVector;
+    private var damage:Float;
 
-    public function new(?X:Float=0, ?Y:Float=0, speed:Float):Void {
+    public function new(?X:Float=0, ?Y:Float=0, speed:Float, damage:Float):Void {
         super(X,Y);
         loadGraphic(AssetPaths.KnightProjectile__png);
         this.speed = speed;
+        this.damage = damage;
     }
 
     /**
@@ -76,8 +78,7 @@ class Projectile extends FlxSprite {
 	 */
     public static function doDamage(player:Hero, projectile:Projectile) {
         if (player.alive && player.exists && projectile.alive && projectile.exists) {
-            var damage:Float = Std.is(projectile, Fireball) ? DragonBoss.DAMAGE : KnightEnemy.DAMAGE;
-            player.hurt(damage);
+            player.hurt(projectile.damage);
             projectile.kill();
         }
     }

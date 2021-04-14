@@ -13,14 +13,14 @@ class KnightEnemy extends Enemy {
     private static var OFFSET_Y(default, never):Float = 0;
     private static var HEALTH(default, never):Float = 2;
 
-    public static var DAMAGE(default, never):Float = 2;
     public static var SWORDS(default, never):FlxTypedGroup<SwordProjectile> = new FlxTypedGroup<SwordProjectile>();
-    public static var ATTACK_SPEED(default, never):Float = 1.5;
 
-    public function new(X:Float, Y:Float) {
+    public function new(X:Float, Y:Float, ?damage:Float=0, ?attackRange:Float=120, ?attackSpeed:Float=1.5) {
         super(X, Y, REGULAR, WIDTH, HEIGHT, HIT_BOX_WIDTH, HIT_BOX_HEIGHT, OFFSET_X, OFFSET_Y, HEALTH);
         addAnimations();
         attackTimer = 0;
+        this.damage = damage;
+        this.attackSpeed = attackSpeed;
     }
 
     /**
@@ -47,14 +47,9 @@ class KnightEnemy extends Enemy {
         animation.add(Enemy.TAKING_DAMAGE, [0, 5, 0], 6, false);
     }
 
-    override public function attack(elapsed:Float) {
-        if (attackTimer <= 0) {
-            var sword:SwordProjectile = SWORDS.recycle(SwordProjectile);
-            sword.setDirection(playerPosition, new FlxPoint(this.x, this.y));
-            sword.fire();
-            attackTimer = ATTACK_SPEED;
-        } else {
-            attackTimer -= elapsed;
-        }
+    override public function attack() {
+        var sword:SwordProjectile = SWORDS.recycle(SwordProjectile);
+        sword.setDirection(targetPosition, new FlxPoint(this.x, this.y));
+        sword.fire();
     }
 }

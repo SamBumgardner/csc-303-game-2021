@@ -14,7 +14,7 @@ class Hero extends FlxSprite {
 
     public static var BASE_MOVE_SPEED:Float = 200;
 
-    public var playerHealth(default, null):PlayerHealth;
+    private var playerHealth:PlayerHealth;
 
     // Controls
     private static var INPUT_LEFT:FlxKey = FlxKey.LEFT;
@@ -33,6 +33,7 @@ class Hero extends FlxSprite {
         playerHealth = new PlayerHealth(STARTING_MAX_HEALTH);
         health = STARTING_MAX_HEALTH;
         initializeGraphics();
+        FlxG.state.add(playerHealth);
     }
 
     private function initializeGraphics():Void {

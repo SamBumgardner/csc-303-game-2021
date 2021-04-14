@@ -11,14 +11,13 @@ class BatEnemy extends Enemy {
     private static var OFFSET_X(default, never):Float = 6;
     private static var OFFSET_Y(default, never):Float = 6;
     private static var HEALTH(default, never):Float = 1;
-    public static var ATTACK_SPEED(default, never):Float = 2;
 
-    public static var DAMAGE(default, never):Float = 1;
-
-    public function new(X:Float, Y:Float) {
+    public function new(X:Float, Y:Float, ?damage:Float=1, ?attackRange:Float=120, ?attackSpeed:Float=2) {
         super(X, Y, REGULAR, WIDTH, HEIGHT, HIT_BOX_WIDTH, HIT_BOX_HEIGHT, OFFSET_X, OFFSET_Y, HEALTH);
         addAnimations();
         attackTimer = 0;
+        this.damage = damage;
+        this.attackSpeed = attackSpeed;
     }
 
     /**
@@ -45,22 +44,17 @@ class BatEnemy extends Enemy {
         animation.add(Enemy.TAKING_DAMAGE, [0, 2], 6, true);
     }
 
-    override public function attack(elapsed:Float) {
-        if (attackTimer <= 0) {
-            velocity.set(0,0);
-            var direction:FlxVector = getJumpDirection();
-            moveTo(direction);
-            attackTimer = ATTACK_SPEED;
-        } else {
-            attackTimer -= elapsed;
-        }
+    override public function attack() {
+        velocity.set(0,0);
+        var direction:FlxVector = getJumpDirection();
+        moveTo(direction);
     }
 
     private function getJumpDirection():FlxVector {
-        var targetVector:FlxVector = FlxVector.weak(playerPosition.x - this.x, playerPosition.y - this.y);
+        var targetVector:FlxVector = FlxVector.weak(targetPosition.x - this.x, targetPosition.y - this.y);
         var radians:Float = FlxVector.weak(1, 0).radiansBetween(targetVector);
         var direction:FlxVector = FlxVector.weak(1, 0);
-        if (playerPosition.y < this.y) {
+        if (targetPosition.y < this.y) {
             radians = -radians;
         }
         direction.rotateByRadians(radians);

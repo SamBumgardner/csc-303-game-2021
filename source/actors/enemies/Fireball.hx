@@ -8,9 +8,10 @@ class Fireball extends Projectile {
     private static var HEIGHT:Int = 16;
     private static var OFFSET_X:Float = 0;
     private static var OFFSET_Y:Float = 0;
+    private static var DAMAGE:Float = 3;
 
     public function new(?X:Float=0, ?Y:Float=0):Void {
-        super(X,Y, SPEED);
+        super(X,Y, SPEED, DAMAGE);
         loadGraphic(AssetPaths.Fireball__png);
         width = WIDTH;
         height = HEIGHT;

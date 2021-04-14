@@ -1,6 +1,7 @@
 package actors.enemies;
 
-
+import flixel.group.FlxGroup;
+import flixel.tile.FlxTilemap;
 import flixel.FlxG;
 import actors.enemies.fsm.states.Combat.CombatState;
 import actors.enemies.fsm.states.Idle.IdleState;
@@ -21,10 +22,11 @@ enum EnemyType {
 class Enemy extends FlxSprite {
 
     public static var SPEED:Float = 140;
+    public static var WALLS:FlxTilemap;
+    public static var TARGETS:FlxTypedGroup<FlxObject> = new FlxTypedGroup<FlxObject>();
 
     private static var DRAG:Float = 8;
-    private static var ATTACK_RANGE:Float = 120;
-    private static var BOSS_ATTACK_RANGE:Float = 250;
+
 
     // Animation strings
     public static var LEFT_RIGHT:String = "lr";
@@ -34,7 +36,7 @@ class Enemy extends FlxSprite {
     public static var TAKING_DAMAGE:String = "taking damage";
 
     public var type(default, null):EnemyType;
-    public var playerPosition:FlxPoint;
+    public var targetPosition:FlxPoint;
     public var seesPlayer:Bool;
 
     private var spriteWidth:Int;
@@ -43,6 +45,9 @@ class Enemy extends FlxSprite {
     private var attackTimer:Float;
     private var state:State;
     private var states:Vector<State> = new Vector<State>(2);
+    private var damage:Float;
+    private var attackRange:Float;
+    private var attackSpeed:Float;
 
     public function new(X:Float, Y:Float, type:EnemyType, spriteWidth:Int, spriteHeight:Int, width:Float, height:Float, offsetX:Float, offsetY:Float, health:Float) {
         super(X,Y);
@@ -61,6 +66,13 @@ class Enemy extends FlxSprite {
         setupFSM();
         attackTimer = 0;
     }
+
+    public function getDamage():Float { return damage; }
+    public function getAttackRange():Float { return attackRange; }
+    public function getAttackSpeed():Float { return attackSpeed; }
+    public function getAttackTimer():Float { return attackTimer; }
+    public function resetAttackTimer():Void { attackTimer = attackSpeed; }
+    public function decrementAttackTimer(value:Float):Void { attackTimer -= value; }
 
     /**
 	 * Helper function to setup the finite state machine and set initial state
@@ -102,24 +114,12 @@ class Enemy extends FlxSprite {
             animation.play(TAKING_DAMAGE);
             justTookDamage = false;
         }
-        else if (state == states[EnemyStates.IDLE]) {
-            switch (facing) {
-                case FlxObject.LEFT, FlxObject.RIGHT:
-                    animation.play(LEFT_RIGHT);
-
-                case FlxObject.UP:
-                    animation.play(UP);
-
-                case FlxObject.DOWN:
-                    animation.play(DOWN);
-            }
-            attackTimer -= elapsed;
-        } else if (state == states[EnemyStates.COMBAT]) {
-            animation.play(ATTACK);
-        }
-
+        applyTransitionStates();
         state.update(elapsed);
+
         super.update(elapsed);
+
+        FlxG.collide(this, TARGETS);
     }
 
     /**
@@ -148,10 +148,9 @@ class Enemy extends FlxSprite {
 	 * This function is meant to be overriden by child classes. This function is called when
      * the enemy is in the Combat state
      * @author Matt Lippelman
-     * @param elapsed the elapsed time
      * @return void
 	 */
-    public function attack(elapsed:Float):Void {
+    public function attack():Void {
         trace("attack function not implemented");
     }
 
@@ -159,35 +158,57 @@ class Enemy extends FlxSprite {
 	 * This function will check to see if the player is within the attack range of an enemy.
      * If the player is in range, it will switch the enemy to Combat state.
      * @author Matt Lippelman
-     * @param player the Hero object
-     * @param enemy an enemy object to be checked
      * @return void
 	 */
-    public static function checkEnemyAttackRange(player:Hero, enemy:Enemy):Void {
-        var playerMid:FlxPoint = player.getMidpoint();
-        var enemyMid:FlxPoint = enemy.getMidpoint();
-        var attackRange:Float = enemy.type == REGULAR ? ATTACK_RANGE : BOSS_ATTACK_RANGE;
-        var distance:Float = Math.sqrt(Math.pow(playerMid.x - enemyMid.x,2) + Math.pow(playerMid.y - enemyMid.y, 2));
-        if (Math.abs(distance) <= attackRange && enemy.seesPlayer) {
-            enemy.playerPosition = playerMid;
-            enemy.state = enemy.states[EnemyStates.COMBAT];
+    public function isTargetInRange(target:FlxObject):Bool {
+        var targetMid:FlxPoint = target.getMidpoint();
+        var enemyMid:FlxPoint = getMidpoint();
+        var distance:Float = Math.sqrt(Math.pow(targetMid.x - enemyMid.x,2) + Math.pow(targetMid.y - enemyMid.y, 2));
+        if (Math.abs(distance) <= attackRange && seesPlayer) {
+            targetPosition = targetMid;
+            return true;
         } else {
-            enemy.state = enemy.states[EnemyStates.IDLE];
+            return false;
+            targetPosition = null;
         }
     }
 
     public static function handleOverlap(player:Hero, enemy:Enemy):Void {
-        var damage:Float = 0;
-        if (Std.is(enemy, SlimeEnemy)) {
-            damage = SlimeEnemy.DAMAGE;
-        } else if (Std.is(enemy, BatEnemy)) {
-            damage = BatEnemy.DAMAGE;
-        }
-
-        if (player.alive && player.exists && enemy.alive && enemy.exists && enemy.attackTimer <= 0) {
-            player.hurt(damage);
-            enemy.attackTimer = Std.is(enemy, SlimeEnemy) ? SlimeEnemy.ATTACK_SPEED : (Std.is(enemy, BatEnemy) ? BatEnemy.ATTACK_SPEED : 5);
+        if (enemy.attackTimer <= 0) {
+            player.hurt(enemy.damage);
+            enemy.resetAttackTimer();
         }
         enemy.velocity.set(0,0);
+    }
+
+    public function isTargetInVision(target:FlxObject):Bool {
+        if (WALLS.ray(getMidpoint(), target.getMidpoint())) {
+            targetPosition = target.getMidpoint();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function targetFound():Bool {
+        for (target in TARGETS) {
+            if (isTargetInRange(target) && isTargetInVision(target)) {
+                trace("target found");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private inline function applyTransitionStates():Void {
+        var nextState:Int;
+        do {
+            nextState = state.handleState();
+            if (nextState != EnemyStates.NO_CHANGE) {
+                state.transitionOut();
+                state = states[nextState];
+                state.transitionIn();
+            }
+        } while (nextState != EnemyStates.NO_CHANGE);
     }
 }

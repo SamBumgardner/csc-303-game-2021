@@ -1,6 +1,7 @@
 package;
 
 
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import environment.LevelExit;
 import states.GameOverState;
 import actors.enemies.DragonBoss;
@@ -42,20 +43,17 @@ class PlayState extends FlxState
 
 	override public function create():Void
 	{
+		instantiateEntities();
+		setUpLevel();
+		addEntities();
+
+		Enemy.WALLS = walls;
+		Enemy.TARGETS.add(hero);
+
+		FlxG.camera.follow(hero, FlxCameraFollowStyle.TOPDOWN, 1);
+		FlxG.camera.zoom = 2;
+
 		super.create();
-
-
-		//add level
-		map = new FlxOgmo3Loader(AssetPaths.csc303_game_levels__ogmo, AssetPaths.level01__json);
-		walls = map.loadTilemap(AssetPaths.wallTile__png, "walls");
-		walls.follow();
-		walls.setTileProperties(1, FlxObject.NONE);
-		walls.setTileProperties(2, FlxObject.ANY);
-		add(walls);
-
-		//add levelExit
-		levelExit = new LevelExit(270, 430);
-		add(levelExit);
 
 /*
 		// Add door objects
@@ -74,12 +72,17 @@ class PlayState extends FlxState
 		keys.add(key);
 		add(keys);
 */
-		totalKeys = new TotalKeys();
-		enemies = new FlxTypedGroup<Enemy>();
-		hero = new Hero();
-		map.loadEntities(placeEntities, "entities");
-		addEntities();
 		
+	}
+
+	private function setUpLevel():Void {
+		map = new FlxOgmo3Loader(AssetPaths.csc303_game_levels__ogmo, AssetPaths.level01__json);
+		walls = map.loadTilemap(AssetPaths.wallTile__png, "walls");
+		walls.follow();
+		walls.setTileProperties(1, FlxObject.NONE);
+		walls.setTileProperties(2, FlxObject.ANY);
+
+		map.loadEntities(placeEntities, "entities");
 	}
 
 	override public function update(elapsed:Float):Void
@@ -102,13 +105,6 @@ class PlayState extends FlxState
 		FlxG.overlap(hero, enemies, Enemy.handleOverlap);
 		FlxG.overlap(hero, KnightEnemy.SWORDS, Projectile.doDamage);
 		FlxG.overlap(hero, DragonBoss.FIREBALLS, Projectile.doDamage);
-		// check enemy attack range to see if they should start attacking
-		for (enemy in enemies) {
-			if (enemy.alive) {
-				checkEnemyVision(enemy);
-				Enemy.checkEnemyAttackRange(hero, enemy);
-			}
-		}
 
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
@@ -137,12 +133,23 @@ class PlayState extends FlxState
 			totalKeys.pickup();
 			key.pickup();
 		}
+
+	private function instantiateEntities():Void {
+		levelExit = new LevelExit(270, 430);
+		totalKeys = new TotalKeys();
+		enemies = new FlxTypedGroup<Enemy>();
+		hero = new Hero();
+	}
+
 	/**
 	 * Helper function that adds all starting objects to the Scene.
 	 */
 	private function addEntities():Void {
+		//add environment
+		add(walls);
+		add(levelExit);
+		// add actors
 		add(hero);
-		add(hero.playerHealth);
     	add(enemies);
     	addEnemies();
 		add(hero);
@@ -173,14 +180,5 @@ class PlayState extends FlxState
 			{
 				hero.setPosition(entity.x, entity.y);
 			}
-	}
-
-	private function checkEnemyVision(enemy:Enemy) {
-		if (walls.ray(enemy.getMidpoint(), hero.getMidpoint())) {
-			enemy.seesPlayer = true;
-			enemy.playerPosition = hero.getMidpoint();
-		} else {
-			enemy.seesPlayer = false;
-		}
 	}
 }
