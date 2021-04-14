@@ -7,10 +7,10 @@ class KnightEnemy extends Enemy {
 
     private static var WIDTH(default, never):Int = 32;
     private static var HEIGHT(default, never):Int = 32;
-    private static var HIT_BOX_WIDTH(default, never):Float = 20;
-    private static var HIT_BOX_HEIGHT(default, never):Float = 32;
-    private static var OFFSET_X(default, never):Float = 6;
-    private static var OFFSET_Y(default, never):Float = 0;
+    private static var HIT_BOX_WIDTH(default, never):Float = 16;
+    private static var HIT_BOX_HEIGHT(default, never):Float = 20;
+    private static var OFFSET_X(default, never):Float = 8;
+    private static var OFFSET_Y(default, never):Float = 6;
     private static var HEALTH(default, never):Float = 2;
 
     public static var SWORDS(default, never):FlxTypedGroup<SwordProjectile> = new FlxTypedGroup<SwordProjectile>();

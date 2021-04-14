@@ -1,7 +1,5 @@
 package;
 
-
-import flixel.FlxSprite;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import environment.LevelExit;
 import states.GameOverState;
@@ -39,7 +37,6 @@ class PlayState extends FlxState
 	private var walls:FlxTilemap;
 	private var ending:Bool;
 	private var won:Bool;
-	private var hudBackground:FlxSprite;
 
 	private var levelExit:LevelExit;
 
@@ -137,7 +134,6 @@ class PlayState extends FlxState
 		}
 
 	private function instantiateEntities():Void {
-		hudBackground = new FlxSprite().makeGraphic(FlxG.width, 30, FlxColor.BLACK);
 		levelExit = new LevelExit(270, 430);
 		totalKeys = new TotalKeys();
 		enemies = new FlxTypedGroup<Enemy>();
@@ -155,7 +151,6 @@ class PlayState extends FlxState
 		add(hero);
     	add(enemies);
 		add(hero);
-		add(hudBackground);
 		add(hero.playerHealth);
 		add(KnightEnemy.SWORDS);
 		add(DragonBoss.FIREBALLS);

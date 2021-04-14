@@ -7,13 +7,13 @@ class SlimeEnemy extends Enemy {
 
     private static var WIDTH(default, never):Int = 32;
     private static var HEIGHT(default, never):Int = 32;
-    private static var HIT_BOX_WIDTH(default, never):Float = 24;
-    private static var HIT_BOX_HEIGHT(default, never):Float = 24;
-    private static var OFFSET_X(default, never):Float = 4;
-    private static var OFFSET_Y(default, never):Float = 4;
+    private static var HIT_BOX_WIDTH(default, never):Float = 12;
+    private static var HIT_BOX_HEIGHT(default, never):Float = 12;
+    private static var OFFSET_X(default, never):Float = 10;
+    private static var OFFSET_Y(default, never):Float = 10;
     private static var HEALTH(default, never):Float = 2;
 
-    public function new(X:Float, Y:Float, ?damage:Float=1, ?attackRange:Float=120, ?attackSpeed:Float=2) {
+    public function new(X:Float, Y:Float, ?damage:Float=1, ?attackRange:Float=120, ?attackSpeed:Float=1.5) {
         super(X, Y, REGULAR, WIDTH, HEIGHT, HIT_BOX_WIDTH, HIT_BOX_HEIGHT, OFFSET_X, OFFSET_Y, HEALTH);
         addAnimations();
         attackTimer = 0;
