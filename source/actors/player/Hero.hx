@@ -1,5 +1,6 @@
 package actors.player;
 
+import flixel.FlxObject;
 import flixel.math.FlxVector;
 import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKeyboard;
@@ -59,6 +60,8 @@ class Hero extends FlxSprite {
         keys.checkStatus(INPUT_UP, pressed) ? verticalDirection-- : verticalDirection;
         keys.checkStatus(INPUT_DOWN, pressed) ? verticalDirection++ : verticalDirection;
 
+        updateFacing(horizontalDirection, verticalDirection);
+
         moveDirection.x = horizontalDirection;
         moveDirection.y = verticalDirection;
         if (!moveDirection.isZero()) {
@@ -66,6 +69,21 @@ class Hero extends FlxSprite {
         }
 
         return moveDirection;
+    }
+
+    private function updateFacing(horizontalDirection:Int, verticalDirection:Int):Void {
+        if (horizontalDirection > 0) {
+            facing = FlxObject.RIGHT;
+        } 
+        else if (horizontalDirection < 0) {
+            facing = FlxObject.LEFT;
+        }
+        if (verticalDirection > 0) {
+            facing = FlxObject.DOWN;
+        }
+        else if (verticalDirection < 0) {
+            facing = FlxObject.UP;
+        }
     }
 
     private function standardMovement(moveDirection:FlxVector):Void {
