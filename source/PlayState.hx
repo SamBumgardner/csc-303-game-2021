@@ -1,6 +1,6 @@
 package;
 
-
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import environment.LevelExit;
 import states.GameOverState;
 import actors.enemies.DragonBoss;
@@ -44,47 +44,27 @@ class PlayState extends FlxState
 
 	override public function create():Void
 	{
+		instantiateEntities();
+		setUpLevel();
+		addEntities();
+
+		Enemy.WALLS = walls;
+		Enemy.TARGETS.add(hero);
+
+		FlxG.camera.follow(hero, FlxCameraFollowStyle.TOPDOWN, 1);
+		FlxG.camera.zoom = 2;
+
 		super.create();
+	}
 
-
-		//add level
+	private function setUpLevel():Void {
 		map = new FlxOgmo3Loader(AssetPaths.csc303_game_levels__ogmo, AssetPaths.level01__json);
 		walls = map.loadTilemap(AssetPaths.wallTile__png, "walls");
 		walls.follow();
 		walls.setTileProperties(1, FlxObject.NONE);
 		walls.setTileProperties(2, FlxObject.ANY);
-		add(walls);
 
-		//add levelExit
-		levelExit = new LevelExit(270, 430);
-		add(levelExit);
-
-/*
-		// Add door objects
-		doors = new FlxTypedGroup<Door>();
-		door = new Door(50, 50);
-		doors.add(door);
-		door = new Door(250, 250);
-		doors.add(door);
-		add(doors);
-
-		// Add key objects
-		keys = new FlxTypedGroup<Key>();
-		key = new Key(100, 100);
-		keys.add(key);
-		key = new Key(300, 300);
-		keys.add(key);
-		add(keys);
-*/
-		totalKeys = new TotalKeys();
-		enemies = new FlxTypedGroup<Enemy>();
-		hero = new Hero();
-		add(hero);
-		sword = new Item(hero);
-		add(sword);
 		map.loadEntities(placeEntities, "entities");
-		addEntities();
-		
 	}
 
 	override public function update(elapsed:Float):Void
@@ -107,13 +87,6 @@ class PlayState extends FlxState
 		FlxG.overlap(hero, enemies, Enemy.handleOverlap);
 		FlxG.overlap(hero, KnightEnemy.SWORDS, Projectile.doDamage);
 		FlxG.overlap(hero, DragonBoss.FIREBALLS, Projectile.doDamage);
-		// check enemy attack range to see if they should start attacking
-		for (enemy in enemies) {
-			if (enemy.alive) {
-				checkEnemyVision(enemy);
-				Enemy.checkEnemyAttackRange(hero, enemy);
-			}
-		}
 
 		FlxG.overlap(hero, doors, openDoor);
 		FlxG.overlap(hero, keys, pickupKey);
@@ -142,50 +115,44 @@ class PlayState extends FlxState
 			totalKeys.pickup();
 			key.pickup();
 		}
+
+	private function instantiateEntities():Void {
+		levelExit = new LevelExit(270, 430);
+		totalKeys = new TotalKeys();
+		enemies = new FlxTypedGroup<Enemy>();
+		hero = new Hero();
+    sword = new Item(hero);
+	}
+
 	/**
 	 * Helper function that adds all starting objects to the Scene.
 	 */
 	private function addEntities():Void {
+		//add environment
+		add(walls);
+		add(levelExit);
+		// add actors
+    add(enemies);
 		add(hero);
 		add(hero.playerHealth);
-    	add(enemies);
-    	addEnemies();
-		add(hero);
+    add(sword);
 		add(KnightEnemy.SWORDS);
 		add(DragonBoss.FIREBALLS);
-	}
-
-	/*
-	 * Added to test movement and loading of enemies
-	 */
-  	private function addEnemies() {
-		/*for (val in 0...2) {
-			enemies.add(new BatEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
-		}
-		for (val in 0...2) {
-			enemies.add(new SlimeEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
-		}
-		for (val in 0...2) {
-			enemies.add(new KnightEnemy(FlxG.random.int(100, 300), FlxG.random.int(200, 500)));
-		}
-		*/
-		enemies.add(new DragonBoss(75, 350));
 	}
 
 	// places hero in correct spawn position
 	private function placeEntities(entity:EntityData) {
 		if (entity.name == "hero")
-			{
-				hero.setPosition(entity.x, entity.y);
-			}
-	}
-
-	private function checkEnemyVision(enemy:Enemy) {
-		if (walls.ray(enemy.getMidpoint(), hero.getMidpoint())) {
-			enemy.seesPlayer = true;
-			enemy.playerPosition = hero.getMidpoint();
-		} else {
-			enemy.seesPlayer = false;
+		{
+			hero.setPosition(entity.x, entity.y);
+		} else if (entity.name == "dragonBoss") {
+			enemies.add(new DragonBoss(entity.x, entity.y));
+		} else if (entity.name == "bat") {
+			enemies.add(new BatEnemy(entity.x, entity.y));
+		} else if (entity.name == "slime") {
+			enemies.add(new SlimeEnemy(entity.x, entity.y));
+		} else if (entity.name == "knight") {
+			enemies.add(new KnightEnemy(entity.x, entity.y));
 		}
 	}
 }

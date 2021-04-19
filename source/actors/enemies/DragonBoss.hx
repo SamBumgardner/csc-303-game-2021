@@ -14,14 +14,16 @@ class DragonBoss extends Enemy {
     private static var OFFSET_Y(default, never):Float = 8;
     private static var HEALTH(default, never):Float = 8;
 
-    public static var DAMAGE(default, never):Float = 3;
-    public static var ATTACK_SPEED(default, never):Float = 1;
     public static var FIREBALLS(default, never):FlxTypedGroup<Fireball> = new FlxTypedGroup<Fireball>();
 
-    public function new(X:Float, Y:Float) {
+    public function new(X:Float, Y:Float, ?damage:Float=0, ?attackRange:Float=150, ?attackSpeed:Float=1) {
         super(X, Y, BOSS, WIDTH, HEIGHT, HIT_BOX_WIDTH, HIT_BOX_HEIGHT, OFFSET_X, OFFSET_Y, HEALTH);
         addAnimations();
         attackTimer = 0;
+        this.damage = damage;
+        this.attackSpeed = attackSpeed;
+        this.attackRange = attackRange;
+        this.immovable = true;
     }
 
     private override function initializeGraphics():Void {
@@ -39,21 +41,16 @@ class DragonBoss extends Enemy {
         animation.add(Enemy.TAKING_DAMAGE, [0, 4, 0], 6, false);
     }
 
-    override public function attack(elapsed:Float) {
+    override public function attack() {
         var fireball_x_offset:Float = -25;
-        if (playerPosition.x > this.x) {
+        if (targetPosition.x > this.x) {
             this.facing = FlxObject.RIGHT;
             fireball_x_offset = - fireball_x_offset;
         } else {
             this.facing = FlxObject.LEFT;
         }
-        if (attackTimer <= 0) {
-            var fireball:Fireball = FIREBALLS.recycle(Fireball);
-            fireball.setDirection(playerPosition, new FlxPoint(this.x + fireball_x_offset, this.y - 15));
-            fireball.fire();
-            attackTimer = ATTACK_SPEED;
-        } else {
-            attackTimer -= elapsed;
-        }
+        var fireball:Fireball = FIREBALLS.recycle(Fireball);
+        fireball.setDirection(targetPosition, new FlxPoint(this.x + fireball_x_offset, this.y - 15));
+        fireball.fire();
     }
 }

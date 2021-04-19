@@ -9,5 +9,13 @@ class EnemyState implements State {
         this.managedEnemy = enemy;
     }
 
+    public function handleState():Int {
+        return EnemyStates.NO_CHANGE;
+    }
+
     public function update(elapsed:Float):Void {};
+
+    public function transitionIn():Void {};
+
+    public function transitionOut():Void {};
 }

@@ -1,5 +1,6 @@
 package actors.player;
 
+import flixel.util.FlxColor;
 import flixel.group.FlxGroup;
 
 class PlayerHealth extends FlxTypedGroup<HeartContainer> {
@@ -18,7 +19,7 @@ class PlayerHealth extends FlxTypedGroup<HeartContainer> {
 	 */
     private function initializeGraphics():Void {
         for(val in 0...Math.ceil(maxHealth / HeartContainer.MAX_FRAG_AMOUNT)) {
-            add(new HeartContainer(val*HeartContainer.SPRITE_WIDTH, 0, HeartContainer.MAX_FRAG_AMOUNT));
+            add(new HeartContainer(val*HeartContainer.SPRITE_WIDTH, 5, HeartContainer.MAX_FRAG_AMOUNT));
         }
     }
 

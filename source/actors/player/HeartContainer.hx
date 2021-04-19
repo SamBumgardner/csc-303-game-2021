@@ -3,6 +3,8 @@ package actors.player;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 
+using flixel.util.FlxSpriteUtil;
+
 class HeartContainer extends FlxSprite {
 
     private static var FULL_HEART:String = "fullheart";
