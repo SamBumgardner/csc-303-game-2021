@@ -37,15 +37,9 @@ class PlayerHealth extends FlxTypedGroup<HeartContainer> {
     }
 
     public function updateGraphics(currentHealth:Float):Void {
-        for (val in 0...countLiving()) {
-            var heart:HeartContainer = members[val];
-            if (currentHealth >= HeartContainer.MAX_FRAG_AMOUNT) {
-                currentHealth -= HeartContainer.MAX_FRAG_AMOUNT;
-                heart.setFragments(HeartContainer.MAX_FRAG_AMOUNT);
-            } else {
-                heart.setFragments(Std.int(currentHealth));
-                break;
-            }
+        for (val in 0...length) {
+            var healthToDisplay:Float = currentHealth - val * HeartContainer.MAX_FRAG_AMOUNT;
+            members[val].setFragments(Std.int(Math.max(healthToDisplay, 0)));
         }
     }
 }
