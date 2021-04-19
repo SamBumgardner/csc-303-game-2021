@@ -15,6 +15,7 @@ import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import actors.player.Hero;
+import actors.player.Item;
 import environment.Door;
 import environment.TotalKeys;
 import environment.Key;
@@ -26,6 +27,7 @@ import flixel.FlxObject;
 class PlayState extends FlxState
 {
 	private var hero:Hero;
+	private var sword:Item;
 	private var enemies:FlxTypedGroup<Enemy>;
 	private var doors:FlxTypedGroup<Door>;
 	private var door:Door;
@@ -53,25 +55,6 @@ class PlayState extends FlxState
 		FlxG.camera.zoom = 2;
 
 		super.create();
-
-/*
-		// Add door objects
-		doors = new FlxTypedGroup<Door>();
-		door = new Door(50, 50);
-		doors.add(door);
-		door = new Door(250, 250);
-		doors.add(door);
-		add(doors);
-
-		// Add key objects
-		keys = new FlxTypedGroup<Key>();
-		key = new Key(100, 100);
-		keys.add(key);
-		key = new Key(300, 300);
-		keys.add(key);
-		add(keys);
-*/
-		
 	}
 
 	private function setUpLevel():Void {
@@ -138,6 +121,7 @@ class PlayState extends FlxState
 		totalKeys = new TotalKeys();
 		enemies = new FlxTypedGroup<Enemy>();
 		hero = new Hero();
+    sword = new Item(hero);
 	}
 
 	/**
@@ -148,10 +132,10 @@ class PlayState extends FlxState
 		add(walls);
 		add(levelExit);
 		// add actors
-		add(hero);
-    	add(enemies);
+    add(enemies);
 		add(hero);
 		add(hero.playerHealth);
+    add(sword);
 		add(KnightEnemy.SWORDS);
 		add(DragonBoss.FIREBALLS);
 	}
