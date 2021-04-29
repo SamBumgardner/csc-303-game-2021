@@ -60,7 +60,6 @@ class PlayerHealth extends FlxTypedGroup<HeartContainer> {
         if (!members[0].isOnScreen()) {
             var x = FlxG.width / 2 * ((FlxG.camera.zoom - 1) / FlxG.camera.zoom);
             var y = FlxG.height / 2 * ((FlxG.camera.zoom - 1) / FlxG.camera.zoom);
-            trace(x, y);
             resetPosition(x, y);
         }
         super.update(elapsed);
