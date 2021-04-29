@@ -22,6 +22,7 @@ class HeartContainer extends FlxSprite {
 
     public function new(X:Float = 0, Y:Float = 0, fragments:Int) {
         super(X,Y);
+        scrollFactor.set(0, 0);
         this.fragments = fragments;
         addAnimations();
         updateGraphics();
