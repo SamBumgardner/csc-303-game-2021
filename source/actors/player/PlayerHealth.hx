@@ -1,5 +1,6 @@
 package actors.player;
 
+import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.group.FlxGroup;
 
@@ -42,5 +43,26 @@ class PlayerHealth extends FlxTypedGroup<HeartContainer> {
             var healthToDisplay:Float = currentHealth - val * HeartContainer.MAX_FRAG_AMOUNT;
             members[val].setFragments(Std.int(Math.max(healthToDisplay, 0)));
         }
+    }
+
+    /**
+     * Set heart positions the passed in position, relative to the top-left corner of the camera.
+     */
+    public function resetPosition(X:Float = 0, Y:Float = 0):Void {
+        for(i in 0...members.length) {
+            
+            members[i].x = X + i * HeartContainer.SPRITE_WIDTH;
+            members[i].y = Y;
+        }
+    }
+
+    override public function update(elapsed:Float) {
+        if (!members[0].isOnScreen()) {
+            var x = FlxG.width / 2 * ((FlxG.camera.zoom - 1) / FlxG.camera.zoom);
+            var y = FlxG.height / 2 * ((FlxG.camera.zoom - 1) / FlxG.camera.zoom);
+            trace(x, y);
+            resetPosition(x, y);
+        }
+        super.update(elapsed);
     }
 }
